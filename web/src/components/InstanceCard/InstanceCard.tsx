@@ -5,10 +5,10 @@ function InstanceCard({ instance }: any) {
     <div className="InstanceCard-card">
       <div className="InstanceCard-head">
         <h3>{instance.name}</h3>
-        <p>IP: {instance.ip}</p>
+        <p>IP: 127.0.0.1</p>
       </div>
       <div className="InstanceCard-desc">
-        <p>{instance.date}/{instance.os}/{instance.version}</p>
+        <p>{instance.desc}</p>
       </div>
     </div>
   )

@@ -1,18 +1,30 @@
 import InstanceCard from "../../components/InstanceCard/InstanceCard";
 import "./DashBoard.css"
+import { useState, useEffect } from "react";
 
-const test_card: { name: string, ip: string, date: string, os: string, version: string } = {
-  name: 'arch',
-  ip: '10.0.1.12',
-  date: '12.12.2000',
-  os: 'archlinux',
-  version: '6.14.4'
-};
 
 const handleSubmit = () => {
 }
 
 function DashBoard() {
+
+  const [machines, setMachines] = useState({ name: "", desc: "" });
+
+  useEffect(() => {
+    const getXML = (async () => {
+      try {
+        const res = await fetch("http://localhost:3000/getXML");
+        const xml = await res.json();
+        const card = { name: xml.name, desc: xml.desc }
+        setMachines(card);
+      }
+      catch (err: any) {
+        console.log(err.message);
+      }
+    });
+    getXML();
+  }, []);
+
   return (
     <div className="DashBoard">
       <div className="DashBoard-header">
@@ -24,10 +36,10 @@ function DashBoard() {
         </form>
       </div>
       <div className="DashBoard-main">
-        <InstanceCard instance={test_card} />
-        <InstanceCard instance={test_card} />
-        <InstanceCard instance={test_card} />
-        <InstanceCard instance={test_card} />
+        <InstanceCard instance={machines} />
+        <InstanceCard instance={machines} />
+        <InstanceCard instance={machines} />
+        <InstanceCard instance={machines} />
       </div>
     </div>
   )
