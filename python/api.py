@@ -13,7 +13,7 @@ def getData():
     if not conn:
         return jsonify({"error": "failed to open vm"})
 
-    dom = conn.lookupByID(5)
+    dom = conn.lookupByID(1)
     if not dom:
         return jsonify({"error": "cannot find dom by id 5"})
 
@@ -29,4 +29,4 @@ def getData():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True,  port=5000)
