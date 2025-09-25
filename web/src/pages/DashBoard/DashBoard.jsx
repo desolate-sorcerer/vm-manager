@@ -8,17 +8,16 @@ const handleSubmit = () => {
 
 function DashBoard() {
 
-  const [machines, setMachines] = useState({ name: "", desc: "" });
+  const [machines, setMachines] = useState([]);
 
   useEffect(() => {
     const getXML = (async () => {
       try {
         const res = await fetch("http://localhost:3000/getXML");
-        const xml = await res.json();
-        const card = { name: xml.name, desc: xml.desc }
-        setMachines(card);
+        const data = await res.json();
+        setMachines(data)
       }
-      catch (err: any) {
+      catch (err) {
         console.log(err.message);
       }
     });
@@ -36,10 +35,11 @@ function DashBoard() {
         </form>
       </div>
       <div className="DashBoard-main">
-        <InstanceCard instance={machines} />
-        <InstanceCard instance={machines} />
-        <InstanceCard instance={machines} />
-        <InstanceCard instance={machines} />
+        {machines.map((x) => {
+          return (
+            <InstanceCard instance={x} />
+          )
+        })}
       </div>
     </div>
   )

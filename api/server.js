@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(cors({
-  origin: ["http://localhost:5173"],
+  origin: ["http://localhost:5173", "http://localhost:5000"],
   methods: ["GET", "POST", "PUT", "OPTIONS"]
 }));
 app.use(router);
