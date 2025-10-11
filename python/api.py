@@ -9,28 +9,40 @@ CORS(app)
 
 @app.route("/sendXML", methods=['GET'])
 def getData():
+    try:
+        conn = libvirt.open("qemu:///system")
 
-    conn = libvirt.open("qemu:///system")
+        if not conn:
+            return jsonify({"error": "failed to open vm"})
 
-    if not conn:
-        return jsonify({"error": "failed to open vm"})
+        list = conn.listAllDomains()
+        if not list:
+            return jsonify({"error": "cannot find any domain"})
 
-    list = conn.listAllDomains()
-    if not list:
-        return jsonify({"error": "cannot find any domain"})
+        arr = []
+        for dom in list:
+            raw_xml = dom.XMLDesc()
+            xml = minidom.parseString(raw_xml)
 
-    arr = []
-    for dom in list:
-        raw_xml = dom.XMLDesc()
-        xml = minidom.parseString(raw_xml)
-        name = xml.getElementsByTagName("name")[0].firstChild.data
-        desc = xml.getElementsByTagName("description")[0].firstChild.data
-        obj = {"name": name, "desc": desc}
-        arr.append(obj)
+            name_elements = xml.getElementsByTagName("name")
+            name = name_elements[0].firstChild.data if name_elements else "No name"
 
-    return jsonify(arr)
+            desc_elements = xml.getElementsByTagName("description")
+            desc = desc_elements[0].firstChild.data if desc_elements else "No description"
 
-    conn.close()
+            obj = {"name": name, "desc": desc}
+            arr.append(obj)
+
+        return jsonify(arr)
+
+    except libvirt.libvirtError as e:
+        return jsonify({e}), 500
+
+    except Exception as e:
+        return jsonify({e}), 500
+
+    finally:
+        conn.close()
 
 
 if __name__ == '__main__':
