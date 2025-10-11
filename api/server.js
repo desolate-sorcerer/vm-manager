@@ -4,11 +4,14 @@ import cors from "cors"
 import http from "http"
 
 const PORT = process.env.PORT;
+const PYTHONPORT = process.env.PYTHON;
+const REACTPORT = process.env.REACTPORT;
+const URL = process.env.URL;
 const app = express();
 const server = http.createServer(app);
 
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5000"],
+  origin: [`${URL}:${REACTPORT}`, `${URL}:${PYTHONPORT}`],
   methods: ["GET", "POST", "PUT", "OPTIONS"]
 }));
 app.use(router);
