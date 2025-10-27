@@ -1,0 +1,20 @@
+[project]
+name = "app"
+version = "1.0.0"
+description = "api for vm-manager web-app build in flask"
+dependencies = [
+    "flask",
+    "Flask-SQLAlchemy",
+    "flask-cors",
+    "libvirt-python"
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[DATABASE]
+dbname = "vm-db"
+user = "nik"
+host = "localhost"
+password = "nik"
