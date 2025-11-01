@@ -6,15 +6,10 @@ dependencies = [
     "flask",
     "Flask-SQLAlchemy",
     "flask-cors",
-    "libvirt-python"
+    "libvirt-python",
+    "psycopg2"
 ]
 
 [build-system]
 requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
-
-[DATABASE]
-dbname = "vm-db"
-user = "nik"
-host = "localhost"
-password = "nik"

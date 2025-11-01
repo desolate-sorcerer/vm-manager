@@ -1,0 +1,58 @@
+.SideBar {
+  float: left;
+  border-right: 4px solid #222;
+  padding: 3em 2em;
+  width: 15%;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+.SideBar-button {
+  align-self: center;
+  width: 100%;
+  padding: 0.5em 1em;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: var(--blue);
+}
+
+.SideBar-button:hover {
+  cursor: pointer;
+}
+
+.SideBar-navBar p {
+  padding: 0.5em 0.5em;
+  text-align: left;
+  border-radius: 10px;
+  transition: 0.2s;
+  margin: 2em 0;
+  font-size: 16px;
+}
+
+.SideBar-navBar p:hover {
+  background-color: var(--dark-gray);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.SideBar-link {
+  text-decoration: none;
+  color: var(--white);
+}
+
+.SideBar-profile {
+  text-align: center;
+  border: 1px solid #222;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  padding: 0.5em 1em;
+  border-radius: 10px;
+  align-self: center;
+  width: 100%;
+}
+
+.SideBar-profile:hover {
+  cursor: pointer;
+}

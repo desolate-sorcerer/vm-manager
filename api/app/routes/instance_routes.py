@@ -6,4 +6,5 @@ instance_bp = Blueprint("instance", __name__)
 
 @instance_bp.route('/getDesc', methods=["GET"])
 def getDesc():
-    return InstanceService.getDesc()
+    instance = InstanceService()
+    return instance.getDesc()
