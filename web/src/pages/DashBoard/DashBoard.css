@@ -1,38 +1,42 @@
 .DashBoard {
-  width: 70%;
+  width: 85%;
   float: right;
-  margin: 0 5%;
 }
 
-.DashBoard-header form {
+.DashBoard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10% 0 5% 0;
+  border: 2px solid #222;
+  border-left: none;
+  border-top: none;
+  padding: 1em 2em;
 }
 
-.DashBoard-header form input {
-  color: var(--white);
-  font-size: 16px;
-  border-radius: 10px;
-  padding: 0.5em 1em;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+.DashBoard-header-icons {
+  display: flex;
 }
 
-.DashBoard-submit {
-  background-color: var(--blue);
+.DashBoard-header-icons div {
+  padding: 0 1em;
+  filter: brightness(0.8);
+  font-size: 24px;
 }
 
-.DashBoard-submit {
+.DashBoard-header-icons div:hover {
   cursor: pointer;
-  border: none;
+  filter: brightness(1);
 }
 
 .DashBoard-search {
-  background-color: transparent;
-  width: 25%;
+  color: var(--white);
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 1em 1em;
+  width: 300px;
   outline: none;
-  border: 1px solid #444;
+  border: none;
+  background-color: #222;
 }
 
 .DashBoard-main {
@@ -40,4 +44,19 @@
   justify-content: left;
   gap: 10px;
   flex-flow: row wrap;
+  padding: 2em;
+}
+
+.DashBoard-main-header {
+  display: grid;
+  grid-template-columns: 20% 20% 20% auto;
+  width: 100%;
+  padding: 1em 0.5em;
+  filter: brightness(0.8);
+}
+
+.DashBoard-main-header div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
