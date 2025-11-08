@@ -1,13 +1,7 @@
 import libvirt
-import sqlalchemy as db
-from sqlalchemy.orm import sessionmaker
 from flask import jsonify
 from xml.dom import minidom
-from app.models.network_modules import Networks
-
-engine = db.create_engine(
-    'postgresql+psycopg2://nik:pass123@localhost/vm-db')
-Session = sessionmaker(bind=engine)
+from app.static.database import DatabaseServices
 
 states = {
     libvirt.VIR_DOMAIN_RUNNING: 'running',
@@ -23,17 +17,16 @@ states = {
 class InstanceService:
     def __init__(self):
         self.networks = []
+        self.instances = [{}]
 
-    def getDesc(self):
-        session = Session()
-        net = session.query(Networks).all()
+    def storeDesc(self):
+        net = DatabaseServices.getNet()
         for x in net:
             name = x.name
             uri = x.uri
             obj = {"name": name, "uri": uri}
             self.networks.append(obj)
 
-        instances = []
         for network in self.networks:
             uri = network["uri"]
             try:
@@ -46,7 +39,6 @@ class InstanceService:
                 if not list:
                     return jsonify({"error": "cannot find any domain"})
 
-                arr = []
                 for dom in list:
                     raw_xml = dom.XMLDesc()
                     xml = minidom.parseString(raw_xml)
@@ -54,17 +46,11 @@ class InstanceService:
                     name_elements = xml.getElementsByTagName("name")
                     name = name_elements[0].firstChild.data if name_elements else "No name"
 
-                    desc_elements = xml.getElementsByTagName("description")
-                    desc = desc_elements[0].firstChild.data if desc_elements else "No description"
-
                     state, reason = dom.state()
                     state_name = states.get(state, 'unknown')
 
-                    obj = {"name": name, "desc": desc,
-                           "network": network["name"], "status": state_name}
-                    arr.append(obj)
-
-                instances.append(arr)
+                    DatabaseServices.storeDesc(
+                        name, network["name"], state_name)
 
             except libvirt.libvirtError as e:
                 return jsonify({e}), 500
@@ -73,6 +59,6 @@ class InstanceService:
                 return jsonify({e}), 500
 
             finally:
-                session.close()
                 conn.close()
-        return jsonify(instances)
+        data = DatabaseServices.queryDesc()
+        return jsonify(data)

@@ -3,8 +3,6 @@ import DescBar from "../../components/DescBar/DescBar"
 import "./DashBoard.css"
 import { useState, useEffect } from "react";
 import Error from "../Error/Error.jsx";
-import { FaAngleUp } from "react-icons/fa";
-import { FaAngleDown } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { FaQuestionCircle } from "react-icons/fa";
 import { FaCog } from "react-icons/fa";
@@ -17,13 +15,14 @@ function DashBoard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [code, setCode] = useState();
+  const [desc, setDesc] = useState([]);
 
 
   useEffect(() => {
     const getXML = (async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:5000/api/getDesc");
+        const res = await fetch("http://localhost:5000/api/storeDesc");
         const data = await res.json();
         setMachines(data)
         setLoading(false);
@@ -36,6 +35,30 @@ function DashBoard() {
     });
     getXML();
   }, []);
+
+  const handleClick = (e) => {
+    const getSpecs = (async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("http://localhost:5000/api/getData", {
+          method: 'POST',
+          body: JSON.stringify({ name: e }),
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+        const data = await res.json();
+        console.log(data)
+        setLoading(false)
+      }
+      catch (err) {
+        setError(true);
+        setCode(err.message);
+        console.log(err.message);
+      }
+    });
+    getSpecs();
+  }
 
 
   return (
@@ -56,31 +79,10 @@ function DashBoard() {
           <div className="DashBoard-left">
             {loading ? <p>Loading...</p> :
               <div className="DashBoard-main">
-                <div className="DashBoard-main-header">
-                  <div>
-                    <span>Name</span>
-                    <FaAngleUp />
-                  </div>
-                  <div>
-                    <span>Network</span>
-                    <FaAngleDown />
-                  </div>
-                  <div>
-                    <span>Status</span>
-                    <FaAngleDown />
-                  </div>
-                  <div>
-                    <span>Date</span>
-                    <FaAngleDown />
-                  </div>
-                </div>
-                {machines.map((x) => {
+                {machines.map((i) => {
                   return (
-                    x.map((i) => {
-                      return (
-                        <InstanceCard instance={i} />
-                      )
-                    }))
+                    <InstanceCard instance={i} onClick={() => handleClick(i.name)} />
+                  )
                 })}
               </div>
             }
