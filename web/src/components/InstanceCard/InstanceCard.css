@@ -1,6 +1,6 @@
 .InstanceCard-card {
   display: grid;
-  grid-template-columns: 20% 20% 20% auto;
+  grid-template-columns: 30% 30% 30% auto;
   padding: 1em 0.5em;
   width: 100%;
   transition: 0.2s;
@@ -20,8 +20,8 @@
 
 .InstanceCard-circle {
   border-radius: 50%;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   display: inline-block;
 }
 

@@ -1,0 +1,16 @@
+.Desc-bar {
+  height: 100%;
+}
+
+.Desc-bar-container {
+  padding: 4em 0 0 0;
+}
+
+.Desc-bar-line {
+  display: flex;
+  gap: 8px;
+}
+
+.Desc-bar-title {
+  filter: brightness(0.8);
+}

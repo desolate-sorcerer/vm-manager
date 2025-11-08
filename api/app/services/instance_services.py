@@ -6,7 +6,7 @@ from xml.dom import minidom
 from app.models.network_modules import Networks
 
 engine = db.create_engine(
-    'postgresql+psycopg2://nik@localhost/vm-db')
+    'postgresql+psycopg2://nik:pass123@localhost/vm-db')
 Session = sessionmaker(bind=engine)
 
 states = {
@@ -73,6 +73,6 @@ class InstanceService:
                 return jsonify({e}), 500
 
             finally:
-                conn.close()
                 session.close()
+                conn.close()
         return jsonify(instances)

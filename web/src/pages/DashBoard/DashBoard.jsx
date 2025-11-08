@@ -1,4 +1,5 @@
 import InstanceCard from "../../components/InstanceCard/InstanceCard";
+import DescBar from "../../components/DescBar/DescBar"
 import "./DashBoard.css"
 import { useState, useEffect } from "react";
 import Error from "../Error/Error.jsx";
@@ -51,36 +52,43 @@ function DashBoard() {
           </div>
         </div>
 
-        {loading ? <p>Loading...</p> :
-          <div className="DashBoard-main">
-            <div className="DashBoard-main-header">
-              <div>
-                <span>Name</span>
-                <FaAngleUp />
-              </div>
-              <div>
-                <span>Network</span>
-                <FaAngleDown />
-              </div>
-              <div>
-                <span>Status</span>
-                <FaAngleDown />
-              </div>
-              <div>
-                <span>Date</span>
-                <FaAngleDown />
-              </div>
-            </div>
-            {machines.map((x) => {
-              return (
-                x.map((i) => {
+        <div className="DashBoard-menu">
+          <div className="DashBoard-left">
+            {loading ? <p>Loading...</p> :
+              <div className="DashBoard-main">
+                <div className="DashBoard-main-header">
+                  <div>
+                    <span>Name</span>
+                    <FaAngleUp />
+                  </div>
+                  <div>
+                    <span>Network</span>
+                    <FaAngleDown />
+                  </div>
+                  <div>
+                    <span>Status</span>
+                    <FaAngleDown />
+                  </div>
+                  <div>
+                    <span>Date</span>
+                    <FaAngleDown />
+                  </div>
+                </div>
+                {machines.map((x) => {
                   return (
-                    <InstanceCard instance={i} />
-                  )
-                }))
-            })}
+                    x.map((i) => {
+                      return (
+                        <InstanceCard instance={i} />
+                      )
+                    }))
+                })}
+              </div>
+            }
           </div>
-        }
+          <div className="DashBoard-right">
+            <DescBar />
+          </div>
+        </div>
       </div>
     }
     </div>
