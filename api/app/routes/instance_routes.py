@@ -1,6 +1,5 @@
 from flask import Blueprint, request
 from app.services.instance_services import InstanceService
-from flask import jsonify
 
 instance_bp = Blueprint("instance", __name__)
 
@@ -13,6 +12,7 @@ def storeDesc():
 
 @instance_bp.route('/getData', methods=["POST"])
 def getData():
+    instance = InstanceService()
     data = request.get_json()
     name = data.get('name')
-    return jsonify({'name': name})
+    return instance.getData(name)

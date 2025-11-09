@@ -10,3 +10,5 @@ class Instances(base):
     name = Column(String)
     network = Column(String)
     status = Column(String)
+    ram = Column(String)
+    cpu = Column(String)

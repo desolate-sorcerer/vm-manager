@@ -17,7 +17,6 @@ states = {
 class InstanceService:
     def __init__(self):
         self.networks = []
-        self.instances = [{}]
 
     def storeDesc(self):
         net = DatabaseServices.getNet()
@@ -43,14 +42,24 @@ class InstanceService:
                     raw_xml = dom.XMLDesc()
                     xml = minidom.parseString(raw_xml)
 
+                    # get name
                     name_elements = xml.getElementsByTagName("name")
                     name = name_elements[0].firstChild.data if name_elements else "No name"
 
+                    # get ram
+                    ram_elements = xml.getElementsByTagName("memory")
+                    ram = ram_elements[0].firstChild.data if ram_elements else "no ram"
+
+                    # get cpu
+                    cpu_elements = xml.getElementsByTagName("vcpu")
+                    cpu = cpu_elements[0].firstChild.data if cpu_elements else "no cpu"
+
+                    # get state
                     state, reason = dom.state()
                     state_name = states.get(state, 'unknown')
 
                     DatabaseServices.storeDesc(
-                        name, network["name"], state_name)
+                        name, network["name"], state_name, ram, cpu)
 
             except libvirt.libvirtError as e:
                 return jsonify({e}), 500
@@ -61,4 +70,10 @@ class InstanceService:
             finally:
                 conn.close()
         data = DatabaseServices.queryDesc()
+        return jsonify(data)
+
+    def getData(self, name):
+        instance = DatabaseServices.queryData(name)
+        data = {"name": instance.name, "ram": instance.ram,
+                "cpu": instance.cpu, "network": instance.network}
         return jsonify(data)

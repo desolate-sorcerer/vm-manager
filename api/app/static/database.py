@@ -39,7 +39,7 @@ class DatabaseServices:
         finally:
             session.close()
 
-    def storeDesc(name, network, status):
+    def storeDesc(name, network, status, ram, cpu):
         try:
             session = Session()
 
@@ -48,11 +48,23 @@ class DatabaseServices:
                 if (instance.name == name):
                     return 0
             session.add(Instances(
-                name=name, network=network, status=status))
+                name=name, network=network, status=status, ram=ram, cpu=cpu))
             session.commit()
 
         except Exception as e:
             return jsonify({e})
 
+        finally:
+            session.close()
+
+    def queryData(name):
+        try:
+            session = Session()
+            data = session.query(Instances).all()
+            for instance in data:
+                if (instance.name == name):
+                    return instance
+        except Exception as e:
+            return jsonify({e})
         finally:
             session.close()

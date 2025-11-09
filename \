@@ -38,6 +38,7 @@ function DashBoard() {
   }, []);
 
   const handleClick = async (machineName) => {
+    machineName.preventDefault();
     setLoading(true);
     try {
       const res = await fetch("http://localhost:5000/api/getData", {
@@ -78,13 +79,15 @@ function DashBoard() {
 
         <div className="DashBoard-menu">
           <div className="DashBoard-left">
-            <div className="DashBoard-main">
-              {machines.map((i) => {
-                return (
-                  <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} />
-                )
-              })}
-            </div>
+            {loading ? <p>Loading...</p> :
+              <div className="DashBoard-main">
+                {machines.map((i) => {
+                  return (
+                    <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} />
+                  )
+                })}
+              </div>
+            }
           </div>
           {specs ? (
             <div className="DashBoard-right">
@@ -92,6 +95,7 @@ function DashBoard() {
             </div>
           ) : (
             <div>
+              choose vm
             </div>
           )}
         </div>
