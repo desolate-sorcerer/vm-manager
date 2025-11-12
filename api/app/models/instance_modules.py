@@ -12,3 +12,4 @@ class Instances(base):
     status = Column(String)
     ram = Column(String)
     cpu = Column(String)
+    uri = Column(String)

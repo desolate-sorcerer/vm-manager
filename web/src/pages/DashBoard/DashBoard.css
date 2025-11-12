@@ -1,4 +1,5 @@
 .DashBoard {
+  height: 100vh;
   width: 85%;
   float: right;
 }
@@ -13,6 +14,7 @@
 }
 
 .DashBoard-right {
+  flex-direction: column;
   width: 100%;
   border-top: none;
 }

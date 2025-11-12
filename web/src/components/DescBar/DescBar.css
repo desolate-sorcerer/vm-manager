@@ -9,11 +9,12 @@
   font-size: 20px;
 }
 
-.Desc-bar-nav div {
+
+.Desc-bar-link {
   padding: 0.5em 3em;
 }
 
-.Desc-bar-nav div:hover {
+.Desc-bar-link:hover {
   background-color: var(--dark-gray);
   cursor: pointer;
 }

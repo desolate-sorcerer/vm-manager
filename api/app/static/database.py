@@ -1,5 +1,4 @@
 import sqlalchemy as db
-from sqlalchemy import update
 from sqlalchemy.orm import sessionmaker
 from app.models.network_modules import Networks
 from app.models.instance_modules import Instances
@@ -31,16 +30,16 @@ class DatabaseServices:
             arr = []
             for data in desc:
                 arr.append(
-                    {"name": data.name, "network": data.network, "status": data.status})
+                    {"name": data.name, "network": data.network, "status": data.status, "uri": data.uri})
             return arr
 
         except Exception as e:
-            return jsonify({e})
+            return
 
         finally:
             session.close()
 
-    def storeDesc(name, network, status, ram, cpu):
+    def storeDesc(name, network, status, ram, cpu, uri):
         try:
             session = Session()
 
@@ -49,15 +48,16 @@ class DatabaseServices:
                     'network': network,
                     'status': status,
                     'ram': ram,
-                    'cpu': cpu
+                    'cpu': cpu,
+                    'uri': uri
                 })
             if res == 0:
                 session.add(Instances(
-                    name=name, network=network, status=status, ram=ram, cpu=cpu))
+                    name=name, network=network, status=status, ram=ram, cpu=cpu, uri=uri))
             session.commit()
 
         except Exception as e:
-            return jsonify({e})
+            print("error storing data")
 
         finally:
             session.close()
@@ -70,6 +70,6 @@ class DatabaseServices:
                 if (instance.name == name):
                     return instance
         except Exception as e:
-            return jsonify({e})
+            return
         finally:
             session.close()

@@ -66,16 +66,16 @@ class InstanceService:
                         state_name = states.get(state, 'unknown')
 
                         DatabaseServices.storeDesc(
-                            name, net_name, state_name, ram, cpu)
+                            name, net_name, state_name, ram, cpu, uri)
 
                     except Exception as e:
-                        return jsonify({e}), 500
+                        return jsonify({"error": str(e)}), 500
 
             except libvirt.libvirtError as e:
-                return jsonify({e}), 500
+                return jsonify({"error": str(e)}), 500
 
             except Exception as e:
-                return jsonify({e}), 500
+                return jsonify({"error": str(e)}), 500
 
             finally:
                 conn.close()
@@ -88,5 +88,5 @@ class InstanceService:
     def getData(self, name):
         instance = DatabaseServices.queryData(name)
         data = {"name": instance.name, "ram": instance.ram,
-                "cpu": instance.cpu, "network": instance.network}
+                "cpu": instance.cpu, "network": instance.network, "uri": instance.uri}
         return jsonify(data)
