@@ -1,4 +1,5 @@
 import sqlalchemy as db
+from sqlalchemy import update
 from sqlalchemy.orm import sessionmaker
 from app.models.network_modules import Networks
 from app.models.instance_modules import Instances
@@ -43,12 +44,16 @@ class DatabaseServices:
         try:
             session = Session()
 
-            data = session.query(Instances).all()
-            for instance in data:
-                if (instance.name == name):
-                    return 0
-            session.add(Instances(
-                name=name, network=network, status=status, ram=ram, cpu=cpu))
+            res = session.query(Instances).filter(
+                Instances.name == name).update({
+                    'network': network,
+                    'status': status,
+                    'ram': ram,
+                    'cpu': cpu
+                })
+            if res == 0:
+                session.add(Instances(
+                    name=name, network=network, status=status, ram=ram, cpu=cpu))
             session.commit()
 
         except Exception as e:

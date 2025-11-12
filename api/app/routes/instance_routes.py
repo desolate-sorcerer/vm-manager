@@ -16,3 +16,9 @@ def getData():
     data = request.get_json()
     name = data.get('name')
     return instance.getData(name)
+
+
+@instance_bp.route('/getAllData', methods=["GET"])
+def getAllData():
+    instance = InstanceService()
+    return instance.getAllData()

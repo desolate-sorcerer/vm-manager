@@ -22,9 +22,13 @@ function DashBoard() {
     const getXML = (async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:5000/api/storeDesc");
-        const data = await res.json();
-        setMachines(data)
+        const store = await fetch("http://localhost:5000/api/storeDesc");
+        const done = await store.json();
+        if (done) {
+          const res = await fetch("http://localhost:5000/api/getAllData");
+          const data = await res.json();
+          setMachines(data)
+        }
         setLoading(false);
       }
       catch (err) {
@@ -49,7 +53,6 @@ function DashBoard() {
       });
       const data = await res.json();
       setSpecs(data);
-      console.log(data);
       setLoading(false)
     }
     catch (err) {

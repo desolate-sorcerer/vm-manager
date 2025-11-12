@@ -1,0 +1,15 @@
+.InfoBox {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  gap: 2em;
+}
+
+.InfoBox-line {
+  display: flex;
+  gap: 10px;
+}
+
+.InfoBox-title {
+  filter: brightness(0.8);
+}

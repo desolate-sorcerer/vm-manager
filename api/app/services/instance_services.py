@@ -1,6 +1,7 @@
 import libvirt
 from flask import jsonify
 from xml.dom import minidom
+import logging
 from app.static.database import DatabaseServices
 
 states = {
@@ -14,52 +15,61 @@ states = {
 }
 
 
+FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(format=FORMAT)
+
+
 class InstanceService:
     def __init__(self):
-        self.networks = []
+        self.logger = logging.getLogger(__name__)
 
     def storeDesc(self):
-        net = DatabaseServices.getNet()
-        for x in net:
-            name = x.name
-            uri = x.uri
-            obj = {"name": name, "uri": uri}
-            self.networks.append(obj)
+        nets = DatabaseServices.getNet()
+        if not nets:
+            self.logger.error("cannot get network")
+            return jsonify({"error": "cannot get network"})
 
-        for network in self.networks:
-            uri = network["uri"]
+        for net in nets:
+            net_name = net.name
+            uri = net.uri
+
             try:
                 conn = libvirt.open(uri)
-
                 if not conn:
-                    return jsonify({"error": "failed to open vm"})
+                    self.logger.error("cannot open libvirt")
+                    continue
 
                 list = conn.listAllDomains()
                 if not list:
-                    return jsonify({"error": "cannot find any domain"})
+                    self.logger.error("no domain in conn")
+                    continue
 
                 for dom in list:
-                    raw_xml = dom.XMLDesc()
-                    xml = minidom.parseString(raw_xml)
+                    try:
+                        raw_xml = dom.XMLDesc()
+                        xml = minidom.parseString(raw_xml)
 
-                    # get name
-                    name_elements = xml.getElementsByTagName("name")
-                    name = name_elements[0].firstChild.data if name_elements else "No name"
+                        # get name
+                        name_elements = xml.getElementsByTagName("name")
+                        name = name_elements[0].firstChild.data if name_elements else "No name"
 
-                    # get ram
-                    ram_elements = xml.getElementsByTagName("memory")
-                    ram = ram_elements[0].firstChild.data if ram_elements else "no ram"
+                        # get ram
+                        ram_elements = xml.getElementsByTagName("memory")
+                        ram = ram_elements[0].firstChild.data if ram_elements else "no ram"
 
-                    # get cpu
-                    cpu_elements = xml.getElementsByTagName("vcpu")
-                    cpu = cpu_elements[0].firstChild.data if cpu_elements else "no cpu"
+                        # get cpu
+                        cpu_elements = xml.getElementsByTagName("vcpu")
+                        cpu = cpu_elements[0].firstChild.data if cpu_elements else "no cpu"
 
-                    # get state
-                    state, reason = dom.state()
-                    state_name = states.get(state, 'unknown')
+                        # get state
+                        state, reason = dom.state()
+                        state_name = states.get(state, 'unknown')
 
-                    DatabaseServices.storeDesc(
-                        name, network["name"], state_name, ram, cpu)
+                        DatabaseServices.storeDesc(
+                            name, net_name, state_name, ram, cpu)
+
+                    except Exception as e:
+                        return jsonify({e}), 500
 
             except libvirt.libvirtError as e:
                 return jsonify({e}), 500
@@ -69,6 +79,9 @@ class InstanceService:
 
             finally:
                 conn.close()
+        return jsonify(1)
+
+    def getAllData(self):
         data = DatabaseServices.queryDesc()
         return jsonify(data)
 

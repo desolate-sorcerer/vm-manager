@@ -1,5 +1,17 @@
 #!/bin/bash
 
+
+
+#start web
+cd web/
+npm run dev
+
+
+#start api
+cd api/
+source env/bin/active
+python __main__.py
+
 #start db
 docker run -d \
   --name vm-db \

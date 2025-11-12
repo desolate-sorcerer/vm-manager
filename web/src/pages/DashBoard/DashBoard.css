@@ -13,11 +13,8 @@
 }
 
 .DashBoard-right {
-  padding: 2em 0 0 2em;
   width: 100%;
-  border: 2px solid var(--gray);
   border-top: none;
-  min-height: 100vh;
 }
 
 .DashBoard-header {
