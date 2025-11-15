@@ -62,3 +62,8 @@
   flex-flow: row wrap;
   padding: 2em;
 }
+
+.DashBoard-refresh:hover {
+  cursor: pointer;
+  filter: brightness(0.8);
+}

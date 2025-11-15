@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app.services.instance_services import InstanceService
 
 instance_bp = Blueprint("instance", __name__)
@@ -22,3 +22,23 @@ def getData():
 def getAllData():
     instance = InstanceService()
     return instance.getAllData()
+
+
+@instance_bp.route('/changeState', methods=["POST"])
+def changeState():
+    instance = InstanceService()
+    data = request.get_json()
+    name = data.get('name')
+    option = data.get('option')
+
+    if option == 'start':
+        return instance.start(name)
+
+    elif option == 'shutdown':
+        return instance.shutdown(name)
+
+    elif option == 'suspend':
+        return instance.suspend(name)
+
+    else:
+        return jsonify({"error": "invalid option"}), 400

@@ -6,6 +6,7 @@ import Error from "../Error/Error.jsx";
 import { FaUser } from "react-icons/fa";
 import { FaQuestionCircle } from "react-icons/fa";
 import { FaCog } from "react-icons/fa";
+import { FaArrowsRotate } from "react-icons/fa6";
 
 const handleSubmit = () => {
 }
@@ -17,29 +18,33 @@ function DashBoard() {
   const [code, setCode] = useState();
   const [specs, setSpecs] = useState(null);
 
+  const getXML = (async () => {
+    setLoading(true);
+    try {
+      const store = await fetch("http://localhost:5000/api/storeDesc");
+      const done = await store.json();
+      if (done) {
+        const res = await fetch("http://localhost:5000/api/getAllData");
+        const data = await res.json();
+        setMachines(data)
+      }
+      setLoading(false);
+    }
+    catch (err) {
+      setError(true);
+      setCode(err.message)
+      console.log(err.message);
+      setLoading(false);
+    }
+  });
 
   useEffect(() => {
-    const getXML = (async () => {
-      setLoading(true);
-      try {
-        const store = await fetch("http://localhost:5000/api/storeDesc");
-        const done = await store.json();
-        if (done) {
-          const res = await fetch("http://localhost:5000/api/getAllData");
-          const data = await res.json();
-          setMachines(data)
-        }
-        setLoading(false);
-      }
-      catch (err) {
-        setError(true);
-        setCode(err.message)
-        console.log(err.message);
-        setLoading(false);
-      }
-    });
-    getXML();
-  }, []);
+    getXML()
+  }, [])
+
+  const handleRefresh = () => {
+    getXML()
+  }
 
   const handleClick = async (machineName) => {
     setLoading(true);
@@ -82,6 +87,7 @@ function DashBoard() {
         <div className="DashBoard-menu">
           <div className="DashBoard-left">
             <div className="DashBoard-main">
+              <div className="DashBoard-refresh" onClick={() => handleRefresh()}><FaArrowsRotate /></div>
               {machines.map((i) => {
                 return (
                   <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} />

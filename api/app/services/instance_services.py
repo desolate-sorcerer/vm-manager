@@ -90,3 +90,62 @@ class InstanceService:
         data = {"name": instance.name, "ram": instance.ram,
                 "cpu": instance.cpu, "network": instance.network, "uri": instance.uri}
         return jsonify(data)
+
+    def start(self, name):
+        instance = DatabaseServices.queryData(name)
+        try:
+            conn = libvirt.open(instance.uri)
+            if not conn:
+                return jsonify({"error": "cannot open instance"}), 500
+
+            dom = conn.lookupByName(name)
+            if not dom:
+                return jsonify({"error": "cannot open dom"}), 404
+            if dom.isActive():
+                return jsonify({"msg": "machine is already running"})
+
+            dom.create()
+            return jsonify({"msg": "state changed"})
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    def shutdown(self, name):
+        instance = DatabaseServices.queryData(name)
+        try:
+            conn = libvirt.open(instance.uri)
+            if not conn:
+                return jsonify({"error": "cannot open instance"}), 500
+
+            dom = conn.lookupByName(name)
+            if not dom:
+                return jsonify({"error": "cannot open dom"}), 404
+
+            if not dom.isActive():
+                return jsonify({"msg": "domain already stopped"})
+
+            dom.shutdown()
+            return jsonify({"msg": "state changed"})
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    def suspend(self, name):
+        instance = DatabaseServices.queryData(name)
+        try:
+            conn = libvirt.open(instance.uri)
+            if not conn:
+                return jsonify({"error": "cannot open instance"}), 500
+
+            dom = conn.lookupByName(name)
+            if not dom:
+                return jsonify({"error": "cannot open dom"}), 404
+
+            if not dom.isActive():
+                return jsonify({"msg": "domain already stopped"})
+
+            dom.suspend()
+            return jsonify({"msg": "state changed"})
+
+        except Exception as e:
+            return jsonify({"error": str(e)})
