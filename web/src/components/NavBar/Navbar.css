@@ -1,0 +1,55 @@
+.NavBar {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5em 0;
+}
+
+.NavBar-home {
+  font-weight: bold;
+}
+
+.NavBar-home:hover {
+  cursor: pointer;
+}
+
+.NavBar-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.NavBar-links p {
+  padding: 0.5em 2em;
+  transition: 0.2s;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.NavBar-links p:hover {
+  background-color: var(--third);
+  cursor: pointer;
+}
+
+.isActive {
+  background-color: var(--third);
+}
+
+.NavBar-link {
+  text-decoration: none;
+  color: var(--white);
+}
+
+.NavBar-profile div {
+  padding: 0 1em;
+  filter: brightness(0.8);
+  font-size: 24px;
+}
+
+.NavBar-profile div:hover {
+  cursor: pointer;
+  filter: brightness(1);
+}

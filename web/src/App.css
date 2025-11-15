@@ -1,9 +1,9 @@
 :root {
-  --gray: #000;
-  --white: #EBEBF5;
-  --black: #1e1e1d;
-  --blue: #007AFF;
-  --dark-gray: #222;
+  --secondary: #101929;
+  --primary: #020817;
+  --third: #1e293b;
+  --important: #3b82f6;
+  --text-color: #fff;
 }
 
 * {
@@ -13,6 +13,11 @@
 }
 
 body {
-  background-color: var(--black);
-  color: var(--white);
+  min-height: 100vh;
+  background-color: var(--primary);
+  color: var(--text-color);
+}
+
+p {
+  filter: brightness(0.8);
 }

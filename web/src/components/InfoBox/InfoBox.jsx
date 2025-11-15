@@ -21,8 +21,8 @@ function InfoBox({ data }) {
         setMessage(result.msg)
       }
     }
-    catch (err) {
-      return json({ "error": err })
+    catch (error) {
+      setMessage({ error })
     }
   }
 

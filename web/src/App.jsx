@@ -1,12 +1,12 @@
 import DashBoard from './pages/DashBoard/DashBoard'
-import SideBar from "./components/SideBar/SideBar"
+import NavBar from "./components/NavBar/Navbar"
 import { Routes, Route } from "react-router"
 import "./App.css"
 function App() {
 
   return (
     <>
-      <SideBar />
+      <NavBar />
       <Routes>
         <Route path="/" element={<DashBoard />} />
       </Routes>

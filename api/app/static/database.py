@@ -30,7 +30,7 @@ class DatabaseServices:
             arr = []
             for data in desc:
                 arr.append(
-                    {"name": data.name, "network": data.network, "status": data.status, "uri": data.uri})
+                    {"name": data.name, "network": data.network, "status": data.status, "cpu": data.cpu, "ram": data.ram})
             return arr
 
         except Exception as e:

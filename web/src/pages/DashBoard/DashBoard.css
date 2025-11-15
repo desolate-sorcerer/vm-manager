@@ -1,69 +1,39 @@
-.DashBoard {
-  height: 100vh;
-  width: 85%;
-  float: right;
-}
-
-.DashBoard-menu {
-  display: flex;
-  justify-content: space-between;
-}
-
-.DashBoard-left {
-  width: 25%;
-}
-
-.DashBoard-right {
-  flex-direction: column;
-  width: 100%;
-  border-top: none;
-}
-
 .DashBoard-header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 2px solid var(--gray);
-  border-left: none;
-  border-top: none;
-  padding: 1em 2em;
+  background-color: var(--secondary);
+  padding: 2% 10%;
 }
 
-.DashBoard-header-icons {
-  display: flex;
+.DashBoard-header-button {
+  font-size: 18px;
+  padding: 0.5em 2em;
+  background-color: var(--important);
+  color: #000;
+  border-radius: 10px;
+  transition: 0.2s;
 }
 
-.DashBoard-header-icons div {
-  padding: 0 1em;
-  filter: brightness(0.8);
-  font-size: 24px;
-}
-
-.DashBoard-header-icons div:hover {
-  cursor: pointer;
-  filter: brightness(1);
-}
-
-.DashBoard-search {
-  color: var(--white);
-  font-size: 16px;
-  border-radius: 5px;
-  padding: 1em 1em;
-  width: 300px;
-  outline: none;
-  border: none;
-  background-color: var(--dark-gray);
-}
-
-.DashBoard-main {
-  display: flex;
-  justify-content: left;
-  gap: 10px;
-  flex-flow: row wrap;
-  padding: 2em;
-}
-
-.DashBoard-refresh:hover {
+.DashBoard-header-button:hover {
   cursor: pointer;
   filter: brightness(0.8);
+}
+
+.DashBoard-instances {
+  background-color: var(--third);
+  width: 80%;
+  margin: 2em auto;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.DashBoard-menu {
+  font-size: 18px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 15% repeat(9, 10%);
+  filter: brightness(0.7);
+  padding-top: 2em;
 }

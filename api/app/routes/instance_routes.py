@@ -18,10 +18,10 @@ def getData():
     return instance.getData(name)
 
 
-@instance_bp.route('/getAllData', methods=["GET"])
-def getAllData():
+@instance_bp.route('/getDesc', methods=["GET"])
+def getDesc():
     instance = InstanceService()
-    return instance.getAllData()
+    return instance.getDesc()
 
 
 @instance_bp.route('/changeState', methods=["POST"])

@@ -1,15 +1,7 @@
 import InstanceCard from "../../components/InstanceCard/InstanceCard";
-import DescBar from "../../components/DescBar/DescBar"
 import "./DashBoard.css"
 import { useState, useEffect } from "react";
-import Error from "../Error/Error.jsx";
-import { FaUser } from "react-icons/fa";
-import { FaQuestionCircle } from "react-icons/fa";
-import { FaCog } from "react-icons/fa";
-import { FaArrowsRotate } from "react-icons/fa6";
 
-const handleSubmit = () => {
-}
 
 function DashBoard() {
   const [machines, setMachines] = useState([]);
@@ -24,7 +16,7 @@ function DashBoard() {
       const store = await fetch("http://localhost:5000/api/storeDesc");
       const done = await store.json();
       if (done) {
-        const res = await fetch("http://localhost:5000/api/getAllData");
+        const res = await fetch("http://localhost:5000/api/getDesc");
         const data = await res.json();
         setMachines(data)
       }
@@ -41,10 +33,6 @@ function DashBoard() {
   useEffect(() => {
     getXML()
   }, [])
-
-  const handleRefresh = () => {
-    getXML()
-  }
 
   const handleClick = async (machineName) => {
     setLoading(true);
@@ -71,41 +59,40 @@ function DashBoard() {
 
 
   return (
-    <div>{error ? <Error code={code} /> :
-      <div className="DashBoard">
-        <div className="DashBoard-header">
-          <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="search..." className="DashBoard-search" />
-          </form>
-          <div className="DashBoard-header-icons">
-            <div><FaCog /></div>
-            <div><FaQuestionCircle /></div>
-            <div><FaUser /></div>
-          </div>
+    <div className="DashBoard">
+      <div className="DashBoard-header">
+        <div>
+          <h1>Virtual Machine Intances</h1>
+          <p>Manage and monitor all your virtual machine instances</p>
         </div>
-
-        <div className="DashBoard-menu">
-          <div className="DashBoard-left">
-            <div className="DashBoard-main">
-              <div className="DashBoard-refresh" onClick={() => handleRefresh()}><FaArrowsRotate /></div>
-              {machines.map((i) => {
-                return (
-                  <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} />
-                )
-              })}
-            </div>
-          </div>
-          {specs ? (
-            <div className="DashBoard-right">
-              <DescBar data={specs} />
-            </div>
-          ) : (
-            <div>
-            </div>
-          )}
+        <div>
+          <div className="DashBoard-header-button">Create Instance</div>
         </div>
       </div>
-    }
+      <div className="DashBoard-filters">
+      </div>
+      <div className="DashBoard-instances">
+        <h3>Instances</h3>
+        <div className="DashBoard-menu">
+          <div>Name</div>
+          <div>Status</div>
+          <div>Region</div>
+          <div>Private IP</div>
+          <div>Public IP</div>
+          <div>vCPU</div>
+          <div>Memory</div>
+          <div>Disk</div>
+          <div>Network</div>
+          <div>Actions</div>
+        </div>
+        <div className="DashBoard-cards">
+          {machines.map((i) => {
+            return (
+              <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} />
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }

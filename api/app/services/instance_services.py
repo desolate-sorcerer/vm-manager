@@ -81,7 +81,7 @@ class InstanceService:
                 conn.close()
         return jsonify(1)
 
-    def getAllData(self):
+    def getDesc(self):
         data = DatabaseServices.queryDesc()
         return jsonify(data)
 
@@ -124,6 +124,7 @@ class InstanceService:
             if not dom.isActive():
                 return jsonify({"msg": "domain already stopped"})
 
+            dom.resume()
             dom.shutdown()
             return jsonify({"msg": "state changed"})
 

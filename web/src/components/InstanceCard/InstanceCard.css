@@ -1,26 +1,23 @@
 .InstanceCard-card {
-  padding: 0.5em 0.5em;
+  font-size: 18px;
   width: 100%;
+  display: grid;
+  grid-template-columns: 15% repeat(9, 10%);
+  padding: 1em 0;
   transition: 0.2s;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .InstanceCard-card:hover {
-  background-color: var(--blue);
+  background-color: var(--secondary);
+}
+
+.InstanceCard-link {
+  color: var(--important)
+}
+
+.InstanceCard-link:hover {
   cursor: pointer;
-}
-
-.InstanceCard-name {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.InstanceCard-circle {
-  border-radius: 50%;
-  width: 7px;
-  height: 7px;
-  display: inline-block;
 }
 
 .paused {
