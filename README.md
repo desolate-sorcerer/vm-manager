@@ -16,7 +16,7 @@ What is this?
 6. Stores VM information in a database
 
 ## Preview
-![screenshot](images/instances1.png)
+![screenshot](images/screenshot_ui.png)
 
 
 ## Prerequisites

@@ -9,6 +9,7 @@
 }
 
 .NavBar-home {
+  font-size: 20px;
   font-weight: bold;
 }
 
@@ -16,22 +17,11 @@
   cursor: pointer;
 }
 
+
 .NavBar-links {
   display: flex;
   justify-content: space-between;
   gap: 5px;
-}
-
-.NavBar-links p {
-  padding: 0.5em 2em;
-  transition: 0.2s;
-  font-size: 18px;
-  border-radius: 10px;
-}
-
-.NavBar-links p:hover {
-  background-color: var(--third);
-  cursor: pointer;
 }
 
 .isActive {
@@ -39,13 +29,25 @@
 }
 
 .NavBar-link {
+  padding: 0.5em 2em;
+  transition: 0.2s;
+  font-size: 18px;
+  border-radius: 10px;
   text-decoration: none;
   color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  filter: brightness(0.7);
+}
+
+.NavBar-link:hover {
+  background-color: var(--third);
+  cursor: pointer;
 }
 
 .NavBar-profile div {
   padding: 0 1em;
-  filter: brightness(0.8);
   font-size: 24px;
 }
 

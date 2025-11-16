@@ -2,20 +2,33 @@ import "./Navbar.css"
 import { Link } from "react-router"
 import { useLocation } from "react-router";
 import { FaUser } from "react-icons/fa";
-
+import { FaNetworkWired } from "react-icons/fa6";
+import { FaServer } from "react-icons/fa6";
+import { FaHardDrive } from "react-icons/fa6";
+import { FaHome } from "react-icons/fa";
 
 function SideBar() {
   const pathname = useLocation().pathname
   return (
     <div className="NavBar">
       <div className="NavBar-home">
-        VM MANAGER
+        <div>
+          VM MANAGER
+        </div>
       </div>
       <div className="NavBar-links">
-        <Link to="/" className="NavBar-link"><p className={`${pathname == '/' ? 'isActive' : ''}`}>Instances</p></Link>
-        <Link to="/volume" className="NavBar-link"><p className={`${pathname == '/volume' ? 'isActive' : ''}`}>Volumes</p></Link>
-        <Link to="/network" className="NavBar-link"><p className={`${pathname == '/network' ? 'isActive' : ''}`}>Network</p></Link>
-        <Link to="/overview" className="NavBar-link"><p className={`${pathname == '/overview' ? 'isActive' : ''}`}>Overview</p></Link>
+        <Link to="/" className={`${pathname == '/' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
+          <FaServer /><p>Instances</p>
+        </Link>
+        <Link to="/volume" className={`${pathname == '/volume' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
+          <FaHardDrive /><p>Volumes</p>
+        </Link>
+        <Link to="/network" className={`${pathname == '/network' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
+          <FaNetworkWired /><p>Network</p>
+        </Link>
+        <Link to="/overview" className={`${pathname == '/overview' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
+          <FaHome /><p>Overview</p>
+        </Link>
       </div>
       <div className="NavBar-profile">
         <div><FaUser /></div>
