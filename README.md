@@ -24,9 +24,6 @@ cd vm-manager
 ./install
 ```
 
-
-```
-```
 ## Run the application
 ```
 # bash script to start
