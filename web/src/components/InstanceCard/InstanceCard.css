@@ -1,10 +1,14 @@
 .InstanceCard-card {
-  font-size: 18px;
   width: 100%;
   display: grid;
-  grid-template-columns: 15% repeat(9, 10%);
-  padding: 1em 0;
-  transition: 0.2s;
+  grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1.5fr 0.8fr 0.8fr 0.8fr 1.2fr 0.8fr;
+  gap: 2em;
+  padding: 1em 1.5em;
+  margin: 0;
+  transition: all 0.2s ease-in-out;
+  align-items: center;
+  font-size: 14px;
+  background-color: var(--third);
   border-radius: 10px;
 }
 
@@ -20,16 +24,26 @@
   cursor: pointer;
 }
 
+.InstanceCard-status {
+  border-radius: 5px;
+  border: 1px solid;
+  padding: 3px 1em;
+  font-weight: 600;
+}
+
 .paused {
-  background-color: yellow;
+  color: #ffe033;
+  background-color: #263142;
 }
 
 .shut-off {
-  background-color: red;
+  color: #9ca3af;
+  background-color: #263142;
 }
 
 .running {
-  background-color: green;
+  color: #22b85b;
+  background-color: #1e393f;
 }
 
 .white {

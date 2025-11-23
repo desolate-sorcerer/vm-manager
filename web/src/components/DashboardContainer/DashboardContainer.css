@@ -1,0 +1,20 @@
+.DashboardContainer {
+  background: var(--third);
+  border-radius: 8px;
+  padding: 1.5em;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+}
+
+.DashboardContainer:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.DashboardContainer-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2em;
+}

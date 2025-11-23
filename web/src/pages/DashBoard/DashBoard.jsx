@@ -1,6 +1,9 @@
 import InstanceCard from "../../components/InstanceCard/InstanceCard";
+import DashboardContainer from "../../components/DashboardContainer/DashboardContainer";
+import Filter from "../../components/Filter/Filter"
 import "./DashBoard.css"
 import { useState, useEffect } from "react";
+
 
 
 function DashBoard() {
@@ -70,9 +73,9 @@ function DashBoard() {
         </div>
       </div>
       <div className="DashBoard-filters">
+        <Filter />
       </div>
       <div className="DashBoard-instances">
-        <h3>Instances</h3>
         <div className="DashBoard-menu">
           <div>Name</div>
           <div>Status</div>
@@ -92,6 +95,12 @@ function DashBoard() {
             )
           })}
         </div>
+      </div>
+      <div className="DashBoard-containers">
+        <DashboardContainer box={{ type: "Total Instances", data: "5" }} />
+        <DashboardContainer box={{ type: "Running", data: "0" }} />
+        <DashboardContainer box={{ type: "Stopped", data: "1" }} />
+        <DashboardContainer box={{ type: "Total vCPU", data: "15" }} />
       </div>
     </div>
   )

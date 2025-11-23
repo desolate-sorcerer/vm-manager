@@ -30,10 +30,24 @@
 }
 
 .DashBoard-menu {
-  font-size: 18px;
-  width: 100%;
   display: grid;
-  grid-template-columns: 15% repeat(9, 10%);
-  filter: brightness(0.7);
+  grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1.5fr 0.8fr 0.8fr 0.8fr 1.2fr 0.8fr;
+  gap: 2em;
+  padding: 1em 1.5em;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  align-items: center;
+}
+
+.DashBoard-containers {
+  width: 80%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5em;
+  margin-top: 2em;
   padding-top: 2em;
 }
