@@ -6,7 +6,7 @@ function InstanceCard({ instance, onClick }) {
   const ram = Math.floor(instance.ram / 1000000)
   return (
     <div className="InstanceCard-card">
-      <div className="InstanceCard-link">{instance.name}</div>
+      <div className="InstanceCard-link" onClick={onClick}>{instance.name}</div>
       <div className={classes}>{instance.status}</div>
       <div>Ptuj</div>
       <div>192.168.1.50</div>

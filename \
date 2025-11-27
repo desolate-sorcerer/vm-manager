@@ -1,14 +1,9 @@
 import "./Instance.css"
-import { FaArrowLeft } from "react-icons/fa";
 
-function Instance({ data, onClick }) {
+function Instance({ data }) {
   return (
     <div className="instance">
       <div className="instance-header">
-        <div className="instance-header-back" onClick={onClick}>
-          <FaArrowLeft />
-          <p>Go Back</p>
-        </div>
         <h1>{data.name}</h1>
       </div>
 
@@ -27,7 +22,7 @@ function Instance({ data, onClick }) {
         </div>
         <div className="instance-info-box">
           <p>vCPU</p>
-          <p>{data.cpu} cores</p>
+          <p>{data.cpu || "4"} cores</p>
         </div>
         <div className="instance-info-box">
           <p>DISK</p>
@@ -39,11 +34,11 @@ function Instance({ data, onClick }) {
         </div>
         <div className="instance-info-box">
           <p>MEMORY</p>
-          <p>{data.ram}GB</p>
+          <p>{data.ram || "8"}GB</p>
         </div>
         <div className="instance-info-box">
           <p>NETWORK</p>
-          <p>{data.network}</p>
+          <p>{data.network || "Network-VPC-A"}</p>
         </div>
       </div>
 

@@ -1,10 +1,12 @@
 :root {
   --secondary: #101929;
   --primary: #020817;
-  --third: #1e293b;
+  --third: #121c32;
   --important: #3b82f6;
   --text-color: #fff;
 }
+
+
 
 * {
   margin: 0;

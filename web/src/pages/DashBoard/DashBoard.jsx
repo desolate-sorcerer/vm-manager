@@ -60,6 +60,10 @@ function DashBoard() {
     }
   }
 
+  function handleInstance() {
+    setSpecs(null)
+  }
+
 
 
   return (
@@ -106,7 +110,7 @@ function DashBoard() {
             <DashboardContainer box={{ type: "Total vCPU", data: "15" }} />
           </div>
         </div>
-      ) : <Instance data={specs} />}
+      ) : <Instance data={specs} onClick={handleInstance} />}
     </div>
   )
 }
