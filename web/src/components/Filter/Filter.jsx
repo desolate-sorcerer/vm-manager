@@ -24,9 +24,9 @@ function Filter() {
 
           <select className="filter-select">
             <option value="">All</option>
-            <option value="us-west">US West</option>
-            <option value="us-east">US East</option>
-            <option value="europe">Europe</option>
+            <option value="us-west">Ptuj</option>
+            <option value="us-east">Maribor</option>
+            <option value="europe">Ljubljana</option>
           </select>
         </div>
 

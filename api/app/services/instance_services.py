@@ -2,7 +2,7 @@ import libvirt
 from flask import jsonify
 from xml.dom import minidom
 import logging
-from app.static.database import DatabaseServices
+from app.database.database import DatabaseServices
 
 states = {
     libvirt.VIR_DOMAIN_RUNNING: 'running',
@@ -14,7 +14,6 @@ states = {
     libvirt.VIR_DOMAIN_PMSUSPENDED: 'pmsuspended'
 }
 
-
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(format=FORMAT)
 
@@ -22,12 +21,14 @@ logging.basicConfig(format=FORMAT)
 class InstanceService:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        DatabaseServices.create_tables()
+        DatabaseServices.add_default_networks()
 
     def storeDesc(self):
         nets = DatabaseServices.getNet()
         if not nets:
             self.logger.error("cannot get network")
-            return jsonify({"error": "cannot get network"})
+            return jsonify({"error": "cannot get network"}), 500
 
         for net in nets:
             net_name = net.name
@@ -36,15 +37,16 @@ class InstanceService:
             try:
                 conn = libvirt.open(uri)
                 if not conn:
-                    self.logger.error("cannot open libvirt")
+                    self.logger.error(f"cannot open libvirt connection: {uri}")
                     continue
 
-                list = conn.listAllDomains()
-                if not list:
-                    self.logger.error("no domain in conn")
+                domains = conn.listAllDomains()
+                if not domains:
+                    self.logger.info(f"no domains found in {uri}")
+                    conn.close()
                     continue
 
-                for dom in list:
+                for dom in domains:
                     try:
                         raw_xml = dom.XMLDesc()
                         xml = minidom.parseString(raw_xml)
@@ -55,31 +57,39 @@ class InstanceService:
 
                         # get ram
                         ram_elements = xml.getElementsByTagName("memory")
-                        ram = ram_elements[0].firstChild.data if ram_elements else "no ram"
+                        ram = ram_elements[0].firstChild.data if ram_elements else "0"
 
                         # get cpu
                         cpu_elements = xml.getElementsByTagName("vcpu")
-                        cpu = cpu_elements[0].firstChild.data if cpu_elements else "no cpu"
+                        cpu = cpu_elements[0].firstChild.data if cpu_elements else "0"
 
                         # get state
                         state, reason = dom.state()
                         state_name = states.get(state, 'unknown')
 
-                        DatabaseServices.storeDesc(
-                            name, net_name, state_name, ram, cpu, uri)
+                        # Store in database
+                        success = DatabaseServices.storeDesc(
+                            name, net_name, state_name, ram, cpu, uri
+                        )
+
+                        if not success:
+                            self.logger.error(
+                                f"Failed to store instance: {name}")
 
                     except Exception as e:
-                        return jsonify({"error": str(e)}), 500
+                        self.logger.error(f"Error processing domain: {e}")
+                        continue
+
+                conn.close()
 
             except libvirt.libvirtError as e:
-                return jsonify({"error": str(e)}), 500
-
+                self.logger.error(f"Libvirt error: {e}")
+                continue
             except Exception as e:
-                return jsonify({"error": str(e)}), 500
+                self.logger.error(f"Unexpected error: {e}")
+                continue
 
-            finally:
-                conn.close()
-        return jsonify(1)
+        return jsonify({"message": "Instance data stored successfully"})
 
     def getDesc(self):
         data = DatabaseServices.queryDesc()
@@ -87,66 +97,123 @@ class InstanceService:
 
     def getData(self, name):
         instance = DatabaseServices.queryData(name)
-        data = {"name": instance.name, "ram": instance.ram,
-                "cpu": instance.cpu, "network": instance.network, "uri": instance.uri}
+        if not instance:
+            return jsonify({"error": "Instance not found"}), 404
+
+        data = {
+            "name": instance.name,
+            "ram": instance.ram,
+            "cpu": instance.cpu,
+            "network": instance.network,
+            "status": instance.status,
+            "uri": instance.uri
+        }
         return jsonify(data)
 
     def start(self, name):
         instance = DatabaseServices.queryData(name)
+        if not instance:
+            return jsonify({"error": "Instance not found"}), 404
+
         try:
             conn = libvirt.open(instance.uri)
             if not conn:
-                return jsonify({"error": "cannot open instance"}), 500
+                return jsonify({"error": "cannot open libvirt connection"}), 500
 
             dom = conn.lookupByName(name)
             if not dom:
-                return jsonify({"error": "cannot open dom"}), 404
+                conn.close()
+                return jsonify({"error": "domain not found"}), 404
+
             if dom.isActive():
-                return jsonify({"msg": "machine is already running"})
+                conn.close()
+                return jsonify({"message": "machine is already running"})
 
             dom.create()
-            return jsonify({"msg": "state changed"})
+            conn.close()
+            return jsonify({"message": "instance started successfully"})
 
+        except libvirt.libvirtError as e:
+            return jsonify({"error": f"Libvirt error: {str(e)}"}), 500
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
     def shutdown(self, name):
         instance = DatabaseServices.queryData(name)
+        if not instance:
+            return jsonify({"error": "Instance not found"}), 404
+
         try:
             conn = libvirt.open(instance.uri)
             if not conn:
-                return jsonify({"error": "cannot open instance"}), 500
+                return jsonify({"error": "cannot open libvirt connection"}), 500
 
             dom = conn.lookupByName(name)
             if not dom:
-                return jsonify({"error": "cannot open dom"}), 404
+                conn.close()
+                return jsonify({"error": "domain not found"}), 404
 
             if not dom.isActive():
-                return jsonify({"msg": "domain already stopped"})
+                conn.close()
+                return jsonify({"message": "domain already stopped"})
 
-            dom.resume()
             dom.shutdown()
-            return jsonify({"msg": "state changed"})
+            conn.close()
+            return jsonify({"message": "instance shutdown successfully"})
 
+        except libvirt.libvirtError as e:
+            return jsonify({"error": f"Libvirt error: {str(e)}"}), 500
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
     def suspend(self, name):
         instance = DatabaseServices.queryData(name)
+        if not instance:
+            return jsonify({"error": "Instance not found"}), 404
+
         try:
             conn = libvirt.open(instance.uri)
             if not conn:
-                return jsonify({"error": "cannot open instance"}), 500
+                return jsonify({"error": "cannot open libvirt connection"}), 500
 
             dom = conn.lookupByName(name)
             if not dom:
-                return jsonify({"error": "cannot open dom"}), 404
+                conn.close()
+                return jsonify({"error": "domain not found"}), 404
 
             if not dom.isActive():
-                return jsonify({"msg": "domain already stopped"})
+                conn.close()
+                return jsonify({"message": "domain already stopped"})
 
             dom.suspend()
-            return jsonify({"msg": "state changed"})
+            conn.close()
+            return jsonify({"message": "instance suspended successfully"})
 
+        except libvirt.libvirtError as e:
+            return jsonify({"error": f"Libvirt error: {str(e)}"}), 500
         except Exception as e:
-            return jsonify({"error": str(e)})
+            return jsonify({"error": str(e)}), 500
+
+    def resume(self, name):
+        instance = DatabaseServices.queryData(name)
+        if not instance:
+            return jsonify({"error": "Instance not found"}), 404
+
+        try:
+            conn = libvirt.open(instance.uri)
+            if not conn:
+                return jsonify({"error": "cannot open libvirt connection"}), 500
+
+            dom = conn.lookupByName(name)
+            if not dom:
+                conn.close()
+                return jsonify({"error": "domain not found"}), 404
+
+            dom.resume()
+            conn.close()
+            return jsonify({"message": "instance resumed successfully"})
+
+        except libvirt.libvirtError as e:
+            return jsonify({"error": f"Libvirt error: {str(e)}"}), 500
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
