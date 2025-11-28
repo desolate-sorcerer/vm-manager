@@ -65,6 +65,11 @@
   margin-bottom: 2rem;
 }
 
+.instance-btn-container {
+  display: flex;
+}
+
+
 .instance-action-container h1,
 .instance-action-container h3 {
   font-size: 1.25rem;
@@ -73,23 +78,43 @@
   color: #fff;
 }
 
-.instance-action-container button {
-  background: var(--third);
+.instance-action-container div {
   color: #fff;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 0.975rem;
   font-weight: 500;
   cursor: pointer;
   margin-right: 1rem;
   margin-bottom: 0.5rem;
   transition: all 0.2s ease;
   border: none;
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 
-.instance-action-container button:hover {
+
+.instance-btn-container div:hover {
+  filter: brightness(0.8);
+}
+
+.instance-btn-container div button {
+  border: none;
+  background: transparent;
+  color: #fff;
+}
+
+.instance-start-btn {
+  background: green;
+}
+
+.instance-normal-btn {
   background: var(--secondary);
-  border-color: #555;
+}
+
+.instance-delete-btn {
+  background: red;
 }
 
 .instance-resource-container {
@@ -131,41 +156,6 @@
   margin-top: 0.5rem;
   text-align: center;
   font-weight: 600;
-}
-
-.quick-access-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.quick-access-button {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  background: var(--third);
-  border: 1px solid #444;
-  padding: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
-}
-
-.quick-access-button:hover {
-  background: #444;
-  border-color: #555;
-}
-
-.quick-access-title {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.quick-access-desc {
-  font-size: 0.875rem;
-  color: #888;
 }
 
 @media (max-width: 768px) {

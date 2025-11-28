@@ -1,7 +1,36 @@
 import "./Instance.css"
 import { FaArrowLeft } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa6";
+import { FaArrowRotateLeft } from "react-icons/fa6";
+import { FaPause } from "react-icons/fa6";
+import { FaRegSquare } from "react-icons/fa6";
+import { useState } from 'react'
+
+
 
 function Instance({ data, onClick }) {
+  const [message, setMessage] = useState('default');
+
+  const handleState = async (opt) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/changeState", {
+        method: 'POST',
+        body: JSON.stringify({ name: data.name, option: opt }),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      const result = await res.json()
+      if (res.ok) {
+        setMessage(result.msg)
+      }
+    }
+    catch (error) {
+      setMessage({ error })
+    }
+  }
+
+  const ram = Math.floor(data.ram / 1000000)
   return (
     <div className="instance">
       <div className="instance-header">
@@ -39,7 +68,7 @@ function Instance({ data, onClick }) {
         </div>
         <div className="instance-info-box">
           <p>MEMORY</p>
-          <p>{data.ram}GB</p>
+          <p>{ram}GB</p>
         </div>
         <div className="instance-info-box">
           <p>NETWORK</p>
@@ -49,10 +78,27 @@ function Instance({ data, onClick }) {
 
       <div className="instance-action-container">
         <h1>Actions</h1>
-        <button>Start</button>
-        <button>Stop</button>
-        <button>Reboot</button>
-        <button>Delete</button>
+
+        <div className="instance-btn-container">
+          <div className="instance-start-btn" onClick={() => handleState('start')}>
+            <FaPlay />
+            <button  >Start</button>
+          </div>
+
+          <div className="instance-normal-btn" onClick={() => handleState('suspend')}>
+            <FaPause />
+            <button>Stop</button>
+          </div>
+
+          <div className="instance-normal-btn">
+            <FaArrowRotateLeft />
+            <button >Reboot</button>
+          </div>
+          <div className="instance-delete-btn" onClick={() => handleState('shutdown')}>
+            <FaRegSquare />
+            <button >shutDown</button>
+          </div>
+        </div>
       </div>
 
       <div className="instance-resource-container">
@@ -73,27 +119,6 @@ function Instance({ data, onClick }) {
         </div>
       </div>
 
-      <div className="instance-action-container">
-        <h3>Quick Access</h3>
-        <div className="quick-access-grid">
-          <button className="quick-access-button">
-            <span className="quick-access-title">Console</span>
-            <span className="quick-access-desc">Terminal Access</span>
-          </button>
-          <button className="quick-access-button">
-            <span className="quick-access-title">Metrics</span>
-            <span className="quick-access-desc">Performance Details</span>
-          </button>
-          <button className="quick-access-button">
-            <span className="quick-access-title">Details</span>
-            <span className="quick-access-desc">Complete Information</span>
-          </button>
-          <button className="quick-access-button">
-            <span className="quick-access-title">Settings</span>
-            <span className="quick-access-desc">Advanced Configuration</span>
-          </button>
-        </div>
-      </div>
     </div>
   )
 }
