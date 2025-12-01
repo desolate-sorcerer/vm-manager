@@ -32,7 +32,7 @@ class DatabaseServices:
                     "network": data.network,
                     "status": data.status,
                     "cpu": data.cpu,
-                    "ram": data.ram
+                    "ram": data.ram,
                 })
             return arr
         except Exception as e:
@@ -60,7 +60,7 @@ class DatabaseServices:
                     status=status,
                     ram=ram,
                     cpu=cpu,
-                    uri=uri
+                    uri=uri,
                 )
                 session.add(new_instance)
 

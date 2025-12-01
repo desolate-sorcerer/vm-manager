@@ -2,7 +2,8 @@
 
 ## A simple virtual machine management system that helps you monitor and manage your virtual machines.
 ## Preview
-![screenshot](images/screenshot_ui.png)
+![screenshot](images/instance.png)
+![screenshot](images/info.png)
 
 
 ## Prerequisites

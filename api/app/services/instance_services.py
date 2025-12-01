@@ -106,7 +106,7 @@ class InstanceService:
             "cpu": instance.cpu,
             "network": instance.network,
             "status": instance.status,
-            "uri": instance.uri
+            "uri": instance.uri,
         }
         return jsonify(data)
 

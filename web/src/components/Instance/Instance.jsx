@@ -106,15 +106,24 @@ function Instance({ data, onClick }) {
         <div className="resource-usage">
           <div className="resource-item">
             <p>CPU</p>
-            <div className="resource-value">80%</div>
+            <div className="resource-value">
+              <div className="resource-bar1">
+              </div>
+            </div>
           </div>
           <div className="resource-item">
             <p>RAM</p>
-            <div className="resource-value">70%</div>
+            <div className="resource-value">
+              <div className="resource-bar2">
+              </div>
+            </div>
           </div>
           <div className="resource-item">
             <p>DISK</p>
-            <div className="resource-value">60%</div>
+            <div className="resource-value">
+              <div className="resource-bar3">
+              </div>
+            </div>
           </div>
         </div>
       </div>

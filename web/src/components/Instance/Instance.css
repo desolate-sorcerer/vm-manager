@@ -151,11 +151,32 @@
 
 .resource-value {
   background: var(--secondary);
-  padding: 0.5rem;
   border-radius: 4px;
   margin-top: 0.5rem;
   text-align: center;
   font-weight: 600;
+  width: 70%;
+}
+
+.resource-bar1 {
+  height: 20px;
+  background: green;
+  border-radius: 4px;
+  width: 40%;
+}
+
+.resource-bar2 {
+  height: 20px;
+  background: green;
+  border-radius: 4px;
+  width: 30%;
+}
+
+.resource-bar3 {
+  height: 20px;
+  background: orange;
+  border-radius: 4px;
+  width: 60%;
 }
 
 @media (max-width: 768px) {

@@ -9,7 +9,7 @@ function InstanceCard({ instance, onClick }) {
       <div className="InstanceCard-link" onClick={onClick}>{instance.name}</div>
       <div className={classes}>{instance.status}</div>
       <div>Ptuj</div>
-      <div>192.168.1.50</div>
+      <div>192.168.1.12</div>
       <div>42.118.4.52</div>
       <div>{instance.cpu}</div>
       <div>{ram}GB</div>
