@@ -74,36 +74,19 @@ class DatabaseServices:
         finally:
             session.close()
 
-    def queryData(name):
+    def getInstance(name):
         try:
             session = Session()
             instance = session.query(Instances).filter(
                 Instances.name == name).first()
             return instance
         except Exception as e:
-            print(f"Error querying data: {e}")
+            print(f"Error: {e}")
             return None
         finally:
             session.close()
 
-    def delete_instance(name):
-        try:
-            session = Session()
-            instance = session.query(Instances).filter(
-                Instances.name == name).first()
-            if instance:
-                session.delete(instance)
-                session.commit()
-                return True
-            return False
-        except Exception as e:
-            print(f"Error deleting instance: {e}")
-            session.rollback()
-            return False
-        finally:
-            session.close()
-
-    def add_default_networks():
+    def addDefaultNetworks():
         session = Session()
 
         try:
