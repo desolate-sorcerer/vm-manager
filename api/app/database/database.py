@@ -11,16 +11,6 @@ class DatabaseServices:
     def create_tables():
         Base.metadata.create_all(engine)
 
-    def getNet():
-        try:
-            session = Session()
-            net = session.query(Networks).all()
-            return net
-        except Exception as e:
-            return jsonify({"error": str(e)})
-        finally:
-            session.close()
-
     def queryDesc():
         try:
             session = Session()
@@ -85,6 +75,37 @@ class DatabaseServices:
             return None
         finally:
             session.close()
+
+    def getNetworks():
+        try:
+            session = Session()
+            nets = session.query(Networks).all()
+            return nets
+        except Exception as e:
+            return jsonify({"error": str(e)})
+        finally:
+            session.close()
+
+    def addNetwork(name):
+        try:
+            session = Session()
+            new_url = f"qemu+ssh//{name}/system"
+            new_network = Networks(name=name, url=new_url)
+            session.add(new_network)
+        except Exception as e:
+            print(f"error: {e}")
+            return False
+        finally:
+            session.close()
+
+    def delNetwork(name):
+        try:
+            session = Session()
+            session.qury(Networks).filter(Networks.name == name).delete()
+            session.commit()
+        except Exception as e:
+            print(f"error: {e}")
+            return False
 
     def addDefaultNetworks():
         session = Session()

@@ -7,6 +7,8 @@ def create_app():
     CORS(app)
 
     from app.routes.instance_routes import instance_bp
+    from app.routes.network_routes import network_bp
+    app.register_blueprint(network_bp)
     app.register_blueprint(instance_bp, url_prefix='/api')
 
     return app

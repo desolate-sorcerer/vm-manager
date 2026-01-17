@@ -20,7 +20,7 @@ class InstanceService:
         DatabaseServices.addDefaultNetworks()
 
     def storeDesc(self):
-        nets = DatabaseServices.getNet()
+        nets = DatabaseServices.getNetworks()
         if not nets:
             print("cannot get network")
             return jsonify({"error": "cannot get network"})
@@ -210,3 +210,4 @@ class InstanceService:
             return jsonify({"error": e})
         except Exception as e:
             return jsonify({"error": e})
+
