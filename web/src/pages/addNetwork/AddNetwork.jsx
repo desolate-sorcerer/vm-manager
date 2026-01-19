@@ -30,7 +30,7 @@ function AddNetwork() {
       if (!response.ok) {
         setError(data.error || "Failed to add network");
       } else {
-        setMessage(data.msg);
+        changeMessage(data.msg);
         setName("");
       }
     } catch (err) {
@@ -38,9 +38,15 @@ function AddNetwork() {
     }
   };
 
+
+  const changeMessage = (msg) => {
+    setMessage(msg)
+    setTimeout(() => setMessage(""), 3000)
+  }
+
   return (
     <div className="add-network-container">
-      <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Add New Network</h2>
+      <h2>Add New Network</h2>
 
       <form className="add-network-form" onSubmit={handleSubmit}>
         <input

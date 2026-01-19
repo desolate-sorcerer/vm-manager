@@ -7,40 +7,58 @@ import "./Network.css"
 function Network() {
 
   const [networks, setNetworks] = useState([])
-  const [error, setError] = useState(false)
+  const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
   let navigate = useNavigate()
 
   const getNetworks = (async () => {
     try {
       const res = await fetch("http://localhost:5000/getNetworks")
       const data = await res.json()
-      if (data) {
-        setNetworks(data)
+      if (!res.ok) {
+        setError(data.error)
+        console.log("cant get data")
       }
       else {
-        console.log("cant get data")
+        setNetworks(data)
       }
     }
     catch (err) {
-      setError(true)
+      setError("server not reachable")
+      console.log(err.message)
     }
   })
 
   const handleClick = async (network) => {
     try {
-      fetch("http://localhost:5000/delNetwork", {
+      const res = await fetch("http://localhost:5000/delNetwork", {
         method: 'POST',
         body: JSON.stringify({ name: network }),
         headers: {
           "Content-Type": "application/json",
         }
       });
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error)
+        console.log("failed to delete")
+      }
+      else {
+        getNetworks()
+        changeMessage(data.msg)
+      }
     }
     catch (err) {
-      setError(true);
+      setError("server not reachable");
       console.log(err.message);
     }
   }
+
+  const changeMessage = (msg) => {
+    setMessage(msg)
+    setTimeout(() => setMessage(""), 3000)
+  }
+
 
   useEffect(() => {
     getNetworks()
@@ -74,6 +92,8 @@ function Network() {
           })}
         </div>
       </div>
+      {error && <div className="error-message">{error}</div>}
+      {message && <div className="success-message">{message}</div>}
     </div>
   )
 }

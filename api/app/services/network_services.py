@@ -6,15 +6,16 @@ class NetworkService:
     def getNetworks(self):
         try:
             nets = DatabaseServices.getNetworks()
-            arr = []
-            for net in nets:
-                arr.append({
-                    "name": net.name,
-                    "status": "none",
-                    "uri": net.uri
-                })
             if not nets:
                 return jsonify({"error": "can't get networks"}), 500
+            arr = []
+            for net in nets:
+                if(net.uri != "qemu:///system"):
+                    arr.append({
+                        "name": net.name,
+                        "status": "none",
+                        "uri": net.uri
+                    })
             else:
                 return arr, 200
 
