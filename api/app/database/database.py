@@ -8,12 +8,15 @@ Session = sessionmaker(bind=engine)
 
 
 class DatabaseServices:
+
+    @staticmethod
     def create_tables():
         Base.metadata.create_all(engine)
 
+    @staticmethod
     def queryDesc():
+        session = Session()
         try:
-            session = Session()
             desc = session.query(Instances).all()
             arr = []
             for data in desc:
@@ -30,12 +33,13 @@ class DatabaseServices:
         finally:
             session.close()
 
+    @staticmethod
     def storeDesc(name, network, status, ram, cpu, uri):
+        session = Session()
         try:
-            session = Session()
-
             existing_instance = session.query(Instances).filter(
-                Instances.name == name).first()
+                Instances.name == name
+            ).first()
 
             if existing_instance:
                 existing_instance.network = network
@@ -64,11 +68,13 @@ class DatabaseServices:
         finally:
             session.close()
 
+    @staticmethod
     def getInstance(name):
+        session = Session()
         try:
-            session = Session()
             instance = session.query(Instances).filter(
-                Instances.name == name).first()
+                Instances.name == name
+            ).first()
             return instance
         except Exception as e:
             print(f"Error: {e}")
@@ -76,9 +82,10 @@ class DatabaseServices:
         finally:
             session.close()
 
+    @staticmethod
     def getNetworks():
+        session = Session()
         try:
-            session = Session()
             nets = session.query(Networks).all()
             return nets
         except Exception as e:
@@ -86,60 +93,58 @@ class DatabaseServices:
         finally:
             session.close()
 
+    @staticmethod
     def addNetwork(name):
+        session = Session()
         try:
-            session = Session()
-            new_url = f"qemu+ssh//{name}/system"
-            new_network = Networks(name=name, url=new_url)
+            new_uri = f"qemu+ssh://{name}/system"
+            new_network = Networks(name=name, uri=new_uri)
             session.add(new_network)
+            session.commit()
+            return True
         except Exception as e:
             print(f"error: {e}")
+            session.rollback()
             return False
         finally:
             session.close()
 
+    @staticmethod
     def delNetwork(name):
+        session = Session()
         try:
-            session = Session()
-            session.qury(Networks).filter(Networks.name == name).delete()
+            session.query(Networks).filter(
+                Networks.name == name
+            ).delete()
             session.commit()
+            return True
         except Exception as e:
             print(f"error: {e}")
+            session.rollback()
             return False
+        finally:
+            session.close()
 
-    def addDefaultNetworks():
+    @staticmethod
+    def addDefaultNetwork():
         session = Session()
-
         try:
-            default_networks = [
-                {"name": "localhost", "uri": "qemu:///system"},
-                {"name": "dmz", "uri": "qemu+ssh://dmz/system"},
-            ]
+            exists = session.query(Networks).filter(
+                Networks.name == "localhost"
+            ).first()
 
-            added_count = 0
-            for network in default_networks:
-                existing = session.query(Networks).filter(
-                    Networks.name == network["name"]).first()
-                if not existing:
-                    new_network = Networks(
-                        name=network["name"], uri=network["uri"])
-                    session.add(new_network)
-                    print(f" Added network: {
-                          network['name']} -> {network['uri']}")
-                    added_count += 1
-                else:
-                    print(f" Network already exists: {network['name']}")
+            if exists:
+                return
 
+            new_network = Networks(
+                name="localhost",
+                uri="qemu:///system"
+            )
+            session.add(new_network)
             session.commit()
-            print(f"\n Successfully added {added_count} networks")
-
-            networks = session.query(Networks).all()
-            print(f"\n Total networks in database: {len(networks)}")
-            for net in networks:
-                print(f"  - {net.name}: {net.uri}")
 
         except Exception as e:
-            print(f" Error: {e}")
+            print(f"Error: {e}")
             session.rollback()
         finally:
             session.close()

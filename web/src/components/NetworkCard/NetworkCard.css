@@ -1,0 +1,51 @@
+.NetworkCard-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 15fr 0fr;
+  gap: 2em;
+  padding: 1em 1.5em;
+  margin: 0;
+  transition: all 0.2s ease-in-out;
+  align-items: center;
+  font-size: 14px;
+  background-color: var(--third);
+  border-radius: 10px;
+}
+
+.NetworkCard-card:hover {
+  background-color: var(--secondary);
+}
+
+.NetworkCard-link {
+  color: var(--important)
+}
+
+.NetworkCard-link:hover {
+  cursor: pointer;
+}
+
+.NetworkCard-status {
+  border-radius: 5px;
+  border: 1px solid;
+  padding: 3px 1em;
+  font-weight: 600;
+}
+
+.paused {
+  color: #ffe033;
+  background-color: #263142;
+}
+
+.shut-off {
+  color: #9ca3af;
+  background-color: #263142;
+}
+
+.running {
+  color: #22b85b;
+  background-color: #1e393f;
+}
+
+.white {
+  background-color: white;
+}

@@ -16,8 +16,7 @@ states = {
 
 class InstanceService:
     def __init__(self):
-        DatabaseServices.create_tables()
-        DatabaseServices.addDefaultNetworks()
+        pass
 
     def storeDesc(self):
         nets = DatabaseServices.getNetworks()

@@ -2,7 +2,7 @@ from app.database.database import DatabaseServices
 from flask import jsonify
 
 
-class NetworkServices:
+class NetworkService:
     def getNetworks(self):
         try:
             nets = DatabaseServices.getNetworks()
