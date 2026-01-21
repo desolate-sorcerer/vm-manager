@@ -12,6 +12,8 @@ def create_app():
 
     from app.routes.instance_routes import instance_bp
     from app.routes.network_routes import network_bp
+    from app.routes.volume_routes import volume_bp
+    app.register_blueprint(volume_bp)
     app.register_blueprint(network_bp)
     app.register_blueprint(instance_bp, url_prefix='/api')
 
