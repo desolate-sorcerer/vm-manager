@@ -1,0 +1,11 @@
+.pool-menu {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 2fr 2fr 1fr;
+  gap: 2em;
+  padding: 1em 1.5em;
+  margin: 0;
+  align-items: center;
+  font-size: 14px;
+  filter: brightness(0.5);
+}

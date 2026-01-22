@@ -1,0 +1,10 @@
+.volume-menu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  padding: 1em 1.5em;
+  align-items: center;
+  font-size: 14px;
+  filter: brightness(0.5);
+}

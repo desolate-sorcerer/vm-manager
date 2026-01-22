@@ -1,0 +1,25 @@
+.PoolCard-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 2fr 2fr 1fr;
+  gap: 2em;
+  padding: 1em 1.5em;
+  margin: 0;
+  transition: all 0.2s ease-in-out;
+  align-items: center;
+  font-size: 14px;
+  background-color: var(--third);
+  border-radius: 10px;
+}
+
+.PoolCard-card:hover {
+  background-color: var(--secondary);
+}
+
+.PoolCard-link {
+  color: var(--important)
+}
+
+.PoolCard-link:hover {
+  cursor: pointer;
+}

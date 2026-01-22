@@ -2,6 +2,10 @@ import libvirt
 from flask import jsonify
 
 class VolumeService:
+    @staticmethod
+    def convert(num):
+        return round((float(num) * (1.25 * pow(10, -10))),2)
+
     def listAllPools(self):
         try:
             conn = libvirt.open("qemu:///system")
@@ -18,10 +22,10 @@ class VolumeService:
                     info = pool.info()
                     arr.append({"name": pool.name(),
                                 "autostart": str(pool.autostart()),
-                                "num volumes": str(pool.numOfVolumes()),
-                                "capacity": str((info[1] * (1.25 *  pow(10, -10)))),
-                                "allocation": str((info[2] * (1.25 * pow(10, -10)))),
-                                "available": str((info[3] * (1.25 * pow(10,-10)))),
+                                "volumes": str(pool.numOfVolumes()),
+                                "capacity": str(self.convert(info[1])),
+                                "allocation": str(self.convert(info[2])),
+                                "available": str(self.convert(info[3]))
                                 })
 
             return arr
@@ -31,6 +35,8 @@ class VolumeService:
 
         finally:
             conn.close()
+
+
 
     def listVolumes(self, pool):
         try:

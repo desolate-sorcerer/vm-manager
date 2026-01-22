@@ -20,7 +20,7 @@ function SideBar() {
         <Link to="/" className={`${pathname == '/' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
           <FaServer /><p>Instances</p>
         </Link>
-        <Link to="/volume" className={`${pathname == '/volume' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
+        <Link to="/pool" className={`${pathname == '/pool' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
           <FaHardDrive /><p>Volumes</p>
         </Link>
         <Link to="/network" className={`${pathname == '/network' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
