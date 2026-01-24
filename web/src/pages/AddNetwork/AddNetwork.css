@@ -10,6 +10,10 @@
   transform: translate(-50%, -50%);
 }
 
+.add-network-container h2 {
+  padding-bottom: 1em;
+}
+
 .add-network-form {
   display: flex;
   flex-direction: column;

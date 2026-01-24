@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useState, useEffect } from "react"
 import VolumeCard from "../../components/VolumeCard/VolumeCard"
 import "./Volume.css"
@@ -8,6 +8,7 @@ function Volume() {
   const [volumes, setVolumes] = useState([])
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
+  const navigate = useNavigate()
 
   const listVolumes = async (pool) => {
     try {
@@ -49,7 +50,7 @@ function Volume() {
             <p>Manage your volumes</p>
           </div>
           <div>
-            <div className="DashBoard-header-button" onClick={() => navigate('/volume/add')}>add Volume</div>
+            <div className="DashBoard-header-button" onClick={() => navigate(`/pool/${pool}/volumes/add`)}>add Volume</div>
           </div>
         </div>
         <div className="DashBoard-filters">

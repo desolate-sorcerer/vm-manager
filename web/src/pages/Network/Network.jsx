@@ -79,10 +79,10 @@ function Network() {
       </div>
       <div className="DashBoard-instances">
         <div className="Network-menu">
-          <div>Name</div>
-          <div>Status</div>
+          <div>NAME</div>
+          <div>STATUS</div>
           <div></div>
-          <div>Actions</div>
+          <div>ACTIONS</div>
         </div>
         <div className="DashBoard-cards">
           {networks.map((i) => {

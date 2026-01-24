@@ -1,4 +1,5 @@
 import libvirt
+import xml.etree.ElementTree as ET
 from flask import jsonify
 
 class VolumeService:
@@ -60,3 +61,36 @@ class VolumeService:
 
         finally:
             conn.close()
+
+    def createVolume(self, pool_name, label, capacity):
+        conn = None
+        try:
+            conn = libvirt.open("qemu:///system")
+
+            volume = ET.Element("volume")
+            ET.SubElement(volume, "name").text = label
+
+            cap = ET.SubElement(volume, "capacity")
+            cap.set("unit", "G")
+            cap.text = str(int(capacity))
+
+            stgvol_xml = ET.tostring(volume, encoding="unicode")
+
+            pool = conn.storagePoolLookupByName(pool_name)
+            stgvol = pool.createXML(stgvol_xml, 0)
+            
+            pool.refresh(0)
+
+            return jsonify({"message": "successfully created the volume"})
+
+        except libvirt.libvirtError as e:
+            return jsonify({
+                "error": "libvirt error",
+            }), 400
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+        finally:
+            if conn:
+                conn.close()

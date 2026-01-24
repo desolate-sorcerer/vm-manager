@@ -15,3 +15,12 @@ def listVolumes():
     data = request.get_json()
     pool = data.get("name")
     return instance.listVolumes(pool)
+
+@volume_bp.route('/createVolume', methods=["POST"])
+def createVolume():
+    instance = VolumeService()
+    data = request.get_json()
+    pool_name = data.get("pool")
+    label = data.get("label")
+    capacity = data.get("capacity")
+    return instance.createVolume(pool_name,label,capacity)

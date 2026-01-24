@@ -7,4 +7,5 @@
   margin: 0;
   align-items: center;
   font-size: 14px;
+  filter: brightness(0.5);
 }
