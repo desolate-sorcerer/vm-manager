@@ -42,3 +42,15 @@ def changeState():
 
     else:
         return jsonify({"error": "invalid option"}), 400
+
+@instance_bp.route('/addInstance', methods=["POST"])
+def addInstance():
+    instance = InstanceService()
+    data = request.get_json()
+    name = data.get("name")
+    memory = data.get("memory")
+    vcpu = data.get("vcpu")
+    path = data.get("path")
+    iso = data.get("iso")
+    network = data.get("network")
+    return instance.addInstance(name,memory,vcpu,path,iso,network)

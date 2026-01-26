@@ -74,6 +74,11 @@ class VolumeService:
             cap.set("unit", "G")
             cap.text = str(int(capacity))
 
+
+            target = ET.SubElement(volume, "target")
+            fmt = ET.SubElement(target, "format")
+            fmt.set("type", "qcow2")
+
             stgvol_xml = ET.tostring(volume, encoding="unicode")
 
             pool = conn.storagePoolLookupByName(pool_name)

@@ -4,6 +4,7 @@ import Filter from "../../components/Filter/Filter"
 import Instance from "../../components/Instance/Instance"
 import "./DashBoard.css"
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 
 
@@ -64,6 +65,8 @@ function DashBoard() {
     setSpecs(null)
   }
 
+  let navigate = useNavigate()
+
 
 
   return (
@@ -76,7 +79,7 @@ function DashBoard() {
               <p>Manage and monitor all your virtual machine instances</p>
             </div>
             <div>
-              <div className="DashBoard-header-button">Create Instance</div>
+              <div className="DashBoard-header-button" onClick={() => navigate("/addInstance")}>Create Instance</div>
             </div>
           </div>
           <div className="DashBoard-filters">

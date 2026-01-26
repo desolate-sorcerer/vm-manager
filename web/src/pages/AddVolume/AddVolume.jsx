@@ -7,6 +7,7 @@ function AddVolume() {
   const [label, setLabel] = useState("");
   const [capacity, setCapacity] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,13 +29,13 @@ function AddVolume() {
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage(data.error);
+        setError(data.error);
         return;
       }
 
       setMessage(data.message);
     } catch (err) {
-      setMessage(err.message);
+      setError(err.message);
     }
   };
 
@@ -63,7 +64,8 @@ function AddVolume() {
 
         <button type="submit" className="add-volume-submit">Create</button>
 
-        {message && <p className="error-message">{message}</p>}
+        {message && <p className="success-message">{message}</p>}
+        {error && <p className="error-message">{error}</p>}
       </form>
     </div>
   )

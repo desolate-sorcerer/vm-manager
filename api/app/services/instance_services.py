@@ -2,6 +2,8 @@ import libvirt
 from flask import jsonify
 from xml.dom import minidom
 from app.database.database import DatabaseServices
+import uuid
+import os
 
 states = {
     libvirt.VIR_DOMAIN_RUNNING: 'running',
@@ -21,8 +23,7 @@ class InstanceService:
     def storeDesc(self):
         nets = DatabaseServices.getNetworks()
         if not nets:
-            print("cannot get network")
-            return jsonify({"error": "cannot get network"})
+            return jsonify({"error": "cannot get network"}), 500
 
         for net in nets:
             net_name = net.name
@@ -83,7 +84,7 @@ class InstanceService:
                 print(f"error: {e}")
                 continue
 
-        return jsonify({"message": "Instance data stored successfully"})
+        return jsonify({"message": "Instance data stored successfully"}), 200
 
     def getDesc(self):
         data = DatabaseServices.queryDesc()
@@ -107,25 +108,25 @@ class InstanceService:
     def start(self, name):
         instance = DatabaseServices.getInstance(name)
         if not instance:
-            return jsonify({"error": "instance not found"})
+            return jsonify({"error": "instance not found"}), 404
 
         try:
             conn = libvirt.open(instance.uri)
             if not conn:
-                return jsonify({"error": "cannot open libvirt connection"})
+                return jsonify({"error": "cannot open libvirt connection"}), 500
 
             dom = conn.lookupByName(name)
             if not dom:
                 conn.close()
-                return jsonify({"error": "domain not found"})
+                return jsonify({"error": "domain not found"}), 404
 
             if dom.isActive():
                 conn.close()
-                return jsonify({"message": "machine is already running"})
+                return jsonify({"message": "machine is already running"}), 400
 
             dom.create()
             conn.close()
-            return jsonify({"message": "instance started successfully"})
+            return jsonify({"message": "instance started successfully"}), 200
 
         except libvirt.libvirtError as e:
             return jsonify({"error":  e})
@@ -135,78 +136,140 @@ class InstanceService:
     def shutdown(self, name):
         instance = DatabaseServices.getInstance(name)
         if not instance:
-            return jsonify({"error": "Instance not found"})
+            return jsonify({"error": "Instance not found"}), 404
         try:
             conn = libvirt.open(instance.uri)
             if not conn:
-                return jsonify({"error": "cannot open libvirt connection"})
+                return jsonify({"error": "cannot open libvirt connection"}), 500
             dom = conn.lookupByName(name)
             if not dom:
                 conn.close()
-                return jsonify({"error": "domain not found"})
+                return jsonify({"error": "domain not found"}), 404
 
             if not dom.isActive():
                 conn.close()
-                return jsonify({"message": "domain already stopped"})
+                return jsonify({"message": "domain already stopped"}), 400
 
             dom.shutdown()
             conn.close()
-            return jsonify({"message": "instance shutdown successfully"})
+            return jsonify({"message": "instance shutdown successfully"}), 200
 
         except libvirt.libvirtError as e:
-            return jsonify({"error": e})
+            return jsonify({"error": str(e)})
         except Exception as e:
-            return jsonify({"error": e})
+            return jsonify({"error": str(e)})
 
     def suspend(self, name):
         instance = DatabaseServices.getInstance(name)
         if not instance:
-            return jsonify({"error": "Instance not found"})
+            return jsonify({"error": "Instance not found"}), 404
 
         try:
             conn = libvirt.open(instance.uri)
             if not conn:
-                return jsonify({"error": "cannot open libvirt connection"})
+                return jsonify({"error": "cannot open libvirt connection"}), 500
 
             dom = conn.lookupByName(name)
             if not dom:
                 conn.close()
-                return jsonify({"error": "domain not found"})
+                return jsonify({"error": "domain not found"}), 404
 
             if not dom.isActive():
                 conn.close()
-                return jsonify({"message": "domain already stopped"})
+                return jsonify({"message": "domain already stopped"}), 400
 
             dom.suspend()
             conn.close()
-            return jsonify({"message": "instance suspended successfully"})
+            return jsonify({"message": "instance suspended successfully"}), 200
 
         except libvirt.libvirtError as e:
-            return jsonify({"error": e})
+            return jsonify({"error": str(e)})
         except Exception as e:
-            return jsonify({"error": e})
+            return jsonify({"error": str(e)})
 
     def resume(self, name):
         instance = DatabaseServices.getInstance(name)
         if not instance:
-            return jsonify({"error": "Instance not found"})
+            return jsonify({"error": "Instance not found"}), 404
 
         try:
             conn = libvirt.open(instance.uri)
             if not conn:
-                return jsonify({"error": "cannot open libvirt connection"})
+                return jsonify({"error": "cannot open libvirt connection"}), 500
 
             dom = conn.lookupByName(name)
             if not dom:
                 conn.close()
-                return jsonify({"error": "domain not found"})
+                return jsonify({"error": "domain not found"}), 404
 
             dom.resume()
             conn.close()
-            return jsonify({"message": "instance resumed successfully"})
+            return jsonify({"message": "instance resumed successfully"}), 200
 
         except libvirt.libvirtError as e:
-            return jsonify({"error": e})
+            return jsonify({"error": str(e)}), 500
         except Exception as e:
-            return jsonify({"error": e})
+            return jsonify({"error": str(e)}), 500
 
+
+
+    def addInstance(self,name,memory,vcpu,path,iso,network):
+        vm_uuid = str(uuid.uuid4())
+
+        os_section = f"""
+        <os>
+          <type arch='x86_64'>hvm</type>
+          <boot dev='cdrom'/>
+          <boot dev='hd'/>
+        </os>
+        """
+
+        devices_section = f"""
+        <!-- Disk -->
+        <disk type='file' device='disk'>
+          <driver name='qemu' type='qcow2'/>
+          <source file='{path}'/>
+          <target dev='vda' bus='virtio'/>
+        </disk>
+
+        <!-- CD-ROM ISO -->
+        <disk type='file' device='cdrom'>
+          <driver name='qemu' type='raw'/>
+          <source file='{iso}'/>
+          <target dev='hdc' bus='ide'/>
+          <readonly/>
+        </disk>
+
+        <!-- Network -->
+        <interface type='network'>
+          <source network='{network}'/>
+          <model type='virtio'/>
+        </interface>
+
+        <!-- Graphics (VNC) -->
+        <graphics type='vnc' port='-1'/>
+        """
+
+        xml = f"""
+        <domain type='kvm'>
+          <name>{name}</name>
+          <uuid>{vm_uuid}</uuid>
+          <memory unit='MiB'>{memory}</memory>
+          <vcpu>{vcpu}</vcpu>
+          {os_section}
+          <devices>
+            {devices_section}
+          </devices>
+        </domain>
+        """
+
+        try:
+            conn = libvirt.open("qemu:///system")
+            dom = conn.defineXML(xml)
+            dom.create()
+            conn.close()
+
+            return jsonify({"message": "VM successfully created"}), 200
+
+        except libvirt.libvirtError as e:
+            return jsonify({"error": str(e)}), 500
