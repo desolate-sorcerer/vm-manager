@@ -77,8 +77,25 @@ class DatabaseServices:
             ).first()
             return instance
         except Exception as e:
-            print(f"Error: {e}")
+            print({"Error": str(e)})
             return None
+        finally:
+            session.close()
+
+    @staticmethod
+    def rmInstance(name):
+        session = Session()
+        try:
+            rows = session.query(Instances).filter(
+                Instances.name == name
+            ).delete()
+            session.commit()
+            if rows == 0:
+                return False
+            return True
+        except Exception as e:
+            session.rollback()
+            return jsonify({"error": str(e)})
         finally:
             session.close()
 

@@ -64,34 +64,42 @@ class VolumeService:
 
     def createVolume(self, pool_name, label, capacity):
         conn = None
+
         try:
+            capacity_bytes = int(capacity) * 1024 * 1024 * 1024  # GiB
+
             conn = libvirt.open("qemu:///system")
+            pool = conn.storagePoolLookupByName(pool_name)
+
+            if not pool.isActive():
+                pool.create()
+
+            try:
+                pool.storageVolLookupByName(label)
+                return jsonify({"error": "Volume already exists"}), 409
+            except libvirt.libvirtError:
+                pass
 
             volume = ET.Element("volume")
             ET.SubElement(volume, "name").text = label
 
-            cap = ET.SubElement(volume, "capacity")
-            cap.set("unit", "G")
-            cap.text = str(int(capacity))
+            cap = ET.SubElement(volume, "capacity", unit="bytes")
+            cap.text = str(capacity_bytes)
 
+            ET.SubElement(volume, "allocation").text = "0"
 
             target = ET.SubElement(volume, "target")
-            fmt = ET.SubElement(target, "format")
-            fmt.set("type", "qcow2")
+            ET.SubElement(target, "format", type="qcow2")
 
-            stgvol_xml = ET.tostring(volume, encoding="unicode")
+            vol_xml = ET.tostring(volume, encoding="unicode")
 
-            pool = conn.storagePoolLookupByName(pool_name)
-            stgvol = pool.createXML(stgvol_xml, 0)
-            
+            pool.createXML(vol_xml, 0)
             pool.refresh(0)
 
-            return jsonify({"message": "successfully created the volume"})
+            return jsonify({"message": "Volume created successfully"}), 201
 
         except libvirt.libvirtError as e:
-            return jsonify({
-                "error": "libvirt error",
-            }), 400
+            return jsonify({"error": str(e)}), 400
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -99,3 +107,4 @@ class VolumeService:
         finally:
             if conn:
                 conn.close()
+

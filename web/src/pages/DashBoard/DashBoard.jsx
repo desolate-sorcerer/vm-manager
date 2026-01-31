@@ -67,6 +67,30 @@ function DashBoard() {
 
   let navigate = useNavigate()
 
+  const deleteVM = async (name) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/rmInstance", {
+        method: 'POST',
+        body: JSON.stringify({ name }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Failed to delete instance");
+        return;
+      }
+
+      await getXML();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+
 
 
   return (
@@ -101,7 +125,7 @@ function DashBoard() {
             <div className="DashBoard-cards">
               {machines.map((i) => {
                 return (
-                  <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} />
+                  <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} del={() => deleteVM(i.name)} />
                 )
               })}
             </div>

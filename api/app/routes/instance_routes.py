@@ -54,3 +54,10 @@ def addInstance():
     iso = data.get("iso")
     network = data.get("network")
     return instance.addInstance(name,memory,vcpu,path,iso,network)
+
+@instance_bp.route('/rmInstance', methods=["POST"])
+def rmInstance():
+    instance = InstanceService()
+    data = request.get_json()
+    name = data.get("name")
+    return instance.rmInstance(name)

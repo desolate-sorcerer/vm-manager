@@ -105,6 +105,47 @@ class InstanceService:
         }
         return jsonify(data)
 
+    def rmInstance(self, name):
+        instance = DatabaseServices.getInstance(name)
+        if not instance:
+            return jsonify({"error": "instance not found"}), 404
+
+        try:
+            conn = libvirt.open(instance.uri)
+            if not conn:
+                return jsonify({"error": "cannot open libvirt connection"}), 500
+
+            dom = conn.lookupByName(name)
+
+            xml = dom.XMLDesc()
+            parsed = minidom.parseString(xml)
+
+            disk_path = None
+            for disk in parsed.getElementsByTagName("disk"):
+                if disk.getAttribute("device") == "disk":
+                    source = disk.getElementsByTagName("source")
+                    if source:
+                        disk_path = source[0].getAttribute("file")
+
+            if dom.isActive():
+                dom.destroy()
+
+            dom.undefine()
+            conn.close()
+
+            if disk_path and os.path.exists(disk_path):
+                os.remove(disk_path)
+
+            DatabaseServices.rmInstance(name)
+
+            return jsonify({"message": "VM removed successfully"}), 200
+
+        except libvirt.libvirtError as e:
+            return jsonify({"error": str(e)}), 500
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+
     def start(self, name):
         instance = DatabaseServices.getInstance(name)
         if not instance:

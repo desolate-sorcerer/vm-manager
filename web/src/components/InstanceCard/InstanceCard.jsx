@@ -1,6 +1,6 @@
 import "./InstanceCard.css"
 
-function InstanceCard({ instance, onClick }) {
+function InstanceCard({ instance, onClick, del }) {
   const status = instance.status == 'shut off' ? 'shut-off' : instance.status == 'paused' ? 'paused' : instance.status == 'running' ? 'running' : "white";
   const classes = `InstanceCard-status ${status}`
   const ram = Math.floor(instance.ram / 1000000)
@@ -15,7 +15,7 @@ function InstanceCard({ instance, onClick }) {
       <div>{ram}GB</div>
       <div>40GB</div>
       <div className="InstanceCard-link">{instance.network}</div>
-      <div>:</div>
+      <div onClick={del} className="InstanceCard-link">del</div>
     </div>
   )
 }
