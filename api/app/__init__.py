@@ -1,10 +1,12 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
+import os
 from app.database.database import DatabaseServices
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=Config.STATIC_FOLDER, template_folder=Config.TEMPLATE_FOLDER)
+    app.config.from_object(Config)
     CORS(app)
 
     DatabaseServices.create_tables()
