@@ -21,12 +21,16 @@ git clone https://github.com/desolate-sorcerer/vm-manager.git
 
 cd vm-manager
 
-# bash script to install needed dependecis and packages
-./install
+# build
+./build.sh
+
+# install
+sudo dpkg -i vm-manager.deb
+sudo apt install -f
 ```
 
 ## Run the application
 ```
-# bash script to start
- ./start
+# start
+sudo systemctl start vm-manger
 ```
