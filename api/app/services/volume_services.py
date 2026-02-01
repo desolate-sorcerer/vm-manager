@@ -8,14 +8,15 @@ class VolumeService:
         return round((float(num) * (1.25 * pow(10, -10))),2)
 
     def listAllPools(self):
+        conn = None
         try:
             conn = libvirt.open("qemu:///system")
             if not conn:
-                return jsonify({"error": "can't establish connection"})
+                return jsonify({"error": "can't establish connection"}), 500
 
             pools = conn.listAllStoragePools()
             if not pools:
-                return jsonify({"error": "can't list volumes"})
+                return jsonify({"error": "can't list volumes"}), 500
 
             arr = []
             for pool in pools:
@@ -29,44 +30,46 @@ class VolumeService:
                                 "available": str(self.convert(info[3]))
                                 })
 
-            return arr
+            return jsonify(arr), 200
 
         except Exception as e:
-            return jsonify({"error": str(e)})
+            return jsonify({"error": str(e)}), 500
 
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
 
 
     def listVolumes(self, pool):
+        conn = None
         try:
             conn = libvirt.open("qemu:///system")
             if not conn:
-                return jsonify({"error": "can't establish connection"})
+                return jsonify({"error": "can't establish connection"}), 500
             
             sp = conn.storagePoolLookupByName(pool)
             if not sp:
-                return jsonify({"error": "can't open storage pool"})
+                return jsonify({"error": "can't open storage pool"}), 500
 
             volumes = sp.listAllVolumes()
             arr = []
             for vol in volumes:
                 arr.append({"name": str(vol.name())})
 
-            return arr
+            return jsonify(arr)
 
         except Exception as e:
-            return jsonify({"error": str(e)})
+            return jsonify({"error": str(e)}), 500
 
         finally:
-            conn.close()
+            if conn:
+                conn.close()
 
     def createVolume(self, pool_name, label, capacity):
         conn = None
-
         try:
-            capacity_bytes = int(capacity) * 1024 * 1024 * 1024  # GiB
+            capacity_bytes = int(capacity) * 1024 * 1024 * 1024
 
             conn = libvirt.open("qemu:///system")
             pool = conn.storagePoolLookupByName(pool_name)
@@ -76,7 +79,7 @@ class VolumeService:
 
             try:
                 pool.storageVolLookupByName(label)
-                return jsonify({"error": "Volume already exists"}), 409
+                return jsonify({"error": "Volume already exists"}), 500
             except libvirt.libvirtError:
                 pass
 
@@ -96,10 +99,10 @@ class VolumeService:
             pool.createXML(vol_xml, 0)
             pool.refresh(0)
 
-            return jsonify({"message": "Volume created successfully"}), 201
+            return jsonify({"message": "Volume created successfully"}), 200
 
         except libvirt.libvirtError as e:
-            return jsonify({"error": str(e)}), 400
+            return jsonify({"error": str(e)}), 500
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -107,4 +110,3 @@ class VolumeService:
         finally:
             if conn:
                 conn.close()
-

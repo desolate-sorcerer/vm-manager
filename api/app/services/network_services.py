@@ -16,8 +16,7 @@ class NetworkService:
                         "status": "none",
                         "uri": net.uri
                     })
-            else:
-                return arr, 200
+            return jsonify(arr), 200
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -28,7 +27,7 @@ class NetworkService:
             if not success:
                 return jsonify({"error": "failed to add network"}), 500
             else:
-                return jsonify({"msg": "successfuly added network"}), 200
+                return jsonify({"message": "successfuly added network"}), 200
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -39,6 +38,6 @@ class NetworkService:
             if not success:
                 return jsonify({"error": "failed to delete network"}), 500
             else:
-                return jsonify({"msg": "successfuly deleted network"}), 200
+                return jsonify({"message": "successfuly deleted network"}), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500

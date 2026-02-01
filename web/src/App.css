@@ -21,3 +21,54 @@ body {
 p {
   filter: brightness(0.8);
 }
+
+.page-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--third);
+  padding: 2% 10%;
+}
+
+.page-header-button {
+  font-size: 18px;
+  padding: 0.5em 2em;
+  background-color: var(--important);
+  color: #000;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.page-header-button:hover {
+  cursor: pointer;
+  filter: brightness(0.8);
+}
+
+.page-items {
+  background-color: var(--third);
+  width: 80%;
+  margin: 2em auto;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 8px;
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid #e74c3c;
+}
+
+.success-message {
+  color: #27ae60;
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 8px;
+  background-color: rgba(39, 174, 96, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid #27ae60;
+}

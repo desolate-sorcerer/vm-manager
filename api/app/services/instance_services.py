@@ -21,6 +21,7 @@ class InstanceService:
         pass
 
     def storeDesc(self):
+        conn = None
         nets = DatabaseServices.getNetworks()
         if not nets:
             return jsonify({"error": "cannot get network"}), 500
@@ -87,13 +88,17 @@ class InstanceService:
         return jsonify({"message": "Instance data stored successfully"}), 200
 
     def getDesc(self):
-        data = DatabaseServices.queryDesc()
-        return jsonify(data)
+        conn = None
+        try:
+            data = DatabaseServices.queryDesc()
+            return jsonify(data), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
     def getData(self, name):
         instance = DatabaseServices.getInstance(name)
         if not instance:
-            return jsonify({"error": "Instance not found"})
+            return jsonify({"error": "Instance not found"}), 404
 
         data = {
             "name": instance.name,
@@ -103,9 +108,10 @@ class InstanceService:
             "status": instance.status,
             "uri": instance.uri,
         }
-        return jsonify(data)
+        return jsonify(data), 200
 
     def rmInstance(self, name):
+        conn = None
         instance = DatabaseServices.getInstance(name)
         if not instance:
             return jsonify({"error": "instance not found"}), 404
@@ -130,9 +136,7 @@ class InstanceService:
             if dom.isActive():
                 dom.destroy()
 
-            dom.undefine()
-            conn.close()
-
+            
             if disk_path and os.path.exists(disk_path):
                 os.remove(disk_path)
 
@@ -145,8 +149,16 @@ class InstanceService:
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+        finally:
+            if dom:
+                dom.undefine()
+            if conn:
+                conn.close()
+
+
 
     def start(self, name):
+        conn = None
         instance = DatabaseServices.getInstance(name)
         if not instance:
             return jsonify({"error": "instance not found"}), 404
@@ -158,15 +170,13 @@ class InstanceService:
 
             dom = conn.lookupByName(name)
             if not dom:
-                conn.close()
                 return jsonify({"error": "domain not found"}), 404
 
             if dom.isActive():
-                conn.close()
                 return jsonify({"message": "machine is already running"}), 400
 
             dom.create()
-            conn.close()
+
             return jsonify({"message": "instance started successfully"}), 200
 
         except libvirt.libvirtError as e:
@@ -174,7 +184,12 @@ class InstanceService:
         except Exception as e:
             return jsonify({"error": e})
 
+        finally:
+            if conn:
+                conn.close()
+
     def shutdown(self, name):
+        conn = None
         instance = DatabaseServices.getInstance(name)
         if not instance:
             return jsonify({"error": "Instance not found"}), 404
@@ -184,15 +199,12 @@ class InstanceService:
                 return jsonify({"error": "cannot open libvirt connection"}), 500
             dom = conn.lookupByName(name)
             if not dom:
-                conn.close()
                 return jsonify({"error": "domain not found"}), 404
 
             if not dom.isActive():
-                conn.close()
                 return jsonify({"message": "domain already stopped"}), 400
 
             dom.shutdown()
-            conn.close()
             return jsonify({"message": "instance shutdown successfully"}), 200
 
         except libvirt.libvirtError as e:
@@ -200,7 +212,12 @@ class InstanceService:
         except Exception as e:
             return jsonify({"error": str(e)})
 
+        finally:
+            if conn:
+                conn.close()
+
     def suspend(self, name):
+        conn = None
         instance = DatabaseServices.getInstance(name)
         if not instance:
             return jsonify({"error": "Instance not found"}), 404
@@ -212,15 +229,12 @@ class InstanceService:
 
             dom = conn.lookupByName(name)
             if not dom:
-                conn.close()
                 return jsonify({"error": "domain not found"}), 404
 
             if not dom.isActive():
-                conn.close()
                 return jsonify({"message": "domain already stopped"}), 400
 
             dom.suspend()
-            conn.close()
             return jsonify({"message": "instance suspended successfully"}), 200
 
         except libvirt.libvirtError as e:
@@ -228,7 +242,12 @@ class InstanceService:
         except Exception as e:
             return jsonify({"error": str(e)})
 
+        finally:
+            if conn:
+                conn.close()
+
     def resume(self, name):
+        conn = None
         instance = DatabaseServices.getInstance(name)
         if not instance:
             return jsonify({"error": "Instance not found"}), 404
@@ -240,21 +259,24 @@ class InstanceService:
 
             dom = conn.lookupByName(name)
             if not dom:
-                conn.close()
                 return jsonify({"error": "domain not found"}), 404
 
             dom.resume()
-            conn.close()
             return jsonify({"message": "instance resumed successfully"}), 200
 
         except libvirt.libvirtError as e:
             return jsonify({"error": str(e)}), 500
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+        
+        finally:
+            if conn:
+                conn.close()
 
 
 
     def addInstance(self,name,memory,vcpu,path,iso,network):
+        conn = None
         vm_uuid = str(uuid.uuid4())
 
         os_section = f"""
@@ -308,9 +330,12 @@ class InstanceService:
             conn = libvirt.open("qemu:///system")
             dom = conn.defineXML(xml)
             dom.create()
-            conn.close()
 
             return jsonify({"message": "VM successfully created"}), 200
 
         except libvirt.libvirtError as e:
             return jsonify({"error": str(e)}), 500
+
+        finally:
+            if conn:
+                conn.close()

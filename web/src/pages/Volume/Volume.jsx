@@ -10,11 +10,42 @@ function Volume() {
   const [message, setMessage] = useState("")
   const navigate = useNavigate()
 
-  const listVolumes = async (pool) => {
+  const listVolumes = async (poolName) => {
+    setError("");
     try {
       const res = await fetch("http://localhost:5000/listVolumes", {
         method: "POST",
-        body: JSON.stringify({ name: pool }),
+        body: JSON.stringify({ name: poolName }),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || "Failed to fetch volumes")
+        console.error(data.error)
+      } else {
+        setVolumes(data)
+      }
+    } catch (err) {
+      setError(err.message)
+      console.error(err.message)
+    }
+  }
+
+  useEffect(() => {
+    if (pool) {
+      listVolumes(pool)
+    }
+  }, [pool])
+
+  const handleClick = async (volumeName) => {
+    setError("");
+    setMessage("");
+    try {
+      const res = await fetch("http://localhost:5000/deleteVolume", {
+        method: "POST",
+        body: JSON.stringify({ name: volumeName, pool: pool }),
         headers: {
           "Content-Type": "application/json",
         }
@@ -22,45 +53,40 @@ function Volume() {
       const data = await res.json()
       if (!res.ok) {
         setError(data.error)
-        console.log(data.error)
+        console.error(data.error)
+      } else {
+        changeMessage(data.message)
+        await listVolumes(pool)
       }
-      else {
-        setVolumes(data)
-      }
-    }
-    catch (err) {
+    } catch (err) {
       setError(err.message)
+      console.error(err.message)
     }
   }
 
-  useEffect(() => {
-    listVolumes(pool)
-  }, [pool])
-
-  const handleClick = () => {
-
+  const changeMessage = (msg) => {
+    setMessage(msg)
+    setTimeout(() => setMessage(""), 3000)
   }
 
   return (
     <div>
-      <div className="Dashboard">
-        <div className="DashBoard-header">
+      <div>
+        <div className="page-header">
           <div>
             <h1>Volumes</h1>
             <p>Manage your volumes</p>
           </div>
           <div>
-            <div className="DashBoard-header-button" onClick={() => navigate(`/pool/${pool}/volumes/add`)}>add Volume</div>
+            <div className="page-header-button" onClick={() => navigate(`/pool/${pool}/volumes/add`)}>add Volume</div>
           </div>
         </div>
-        <div className="DashBoard-filters">
-        </div>
-        <div className="DashBoard-instances">
+        <div className="page-items">
           <div className="volume-menu">
             <div>NAME</div>
             <div>ACTIONS</div>
           </div>
-          <div className="DashBoard-cards">
+          <div>
             {volumes.map((i) => {
               return (
                 <VolumeCard key={i.name} volume={i} onClick={() => handleClick(i.name)} />
@@ -71,7 +97,6 @@ function Volume() {
         {error && <div className="error-message">{error}</div>}
         {message && <div className="success-message">{message}</div>}
       </div>
-
     </div>
   )
 }

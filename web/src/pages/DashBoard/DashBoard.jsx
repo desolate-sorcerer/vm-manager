@@ -6,41 +6,43 @@ import "./DashBoard.css"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-
-
 function DashBoard() {
   const [machines, setMachines] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [code, setCode] = useState();
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [specs, setSpecs] = useState(null);
 
-  const getXML = (async () => {
-    setLoading(true);
+  const getXML = async () => {
+    setError("");
     try {
       const store = await fetch("http://localhost:5000/api/storeDesc");
-      const done = await store.json();
-      if (done) {
-        const res = await fetch("http://localhost:5000/api/getDesc");
-        const data = await res.json();
-        setMachines(data)
+      const storeData = await store.json();
+
+      if (!store.ok) {
+        setError(storeData.error);
+        return;
       }
-      setLoading(false);
+
+      const res = await fetch("http://localhost:5000/api/getDesc");
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error);
+      } else {
+        setMachines(data);
+      }
+    } catch (err) {
+      setError(err.message);
+      console.error(err.message);
     }
-    catch (err) {
-      setError(true);
-      setCode(err.message)
-      console.log(err.message);
-      setLoading(false);
-    }
-  });
+  };
 
   useEffect(() => {
-    getXML()
-  }, [])
+    getXML();
+  }, []);
 
   const handleClick = async (machineName) => {
-    setLoading(true);
+    setError("");
     try {
       const res = await fetch("http://localhost:5000/api/getData", {
         method: 'POST',
@@ -50,24 +52,28 @@ function DashBoard() {
         }
       });
       const data = await res.json();
-      setSpecs(data);
-      setLoading(false)
+
+      if (!res.ok) {
+        setError(data.error);
+      } else {
+        setSpecs(data);
+      }
+    } catch (err) {
+      setError(err.message);
+      console.error(err.message);
     }
-    catch (err) {
-      setError(true);
-      setCode(err.message);
-      console.log(err.message);
-      setLoading(false)
-    }
-  }
+  };
 
   function handleInstance() {
-    setSpecs(null)
+    setSpecs(null);
+    setError("");
   }
 
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const deleteVM = async (name) => {
+    setError("");
+    setMessage("");
     try {
       const res = await fetch("http://localhost:5000/api/rmInstance", {
         method: 'POST',
@@ -80,36 +86,37 @@ function DashBoard() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Failed to delete instance");
-        return;
+        setError(data.error);
+      } else {
+        setMessage(data.message);
+        await getXML();
+        setTimeout(() => setMessage(""), 3000);
       }
-
-      await getXML();
     } catch (err) {
       setError(err.message);
     }
   };
 
-
-
-
   return (
-    <div className="DashBoard">
+    <div>
+
+
       {specs == null ? (
         <div>
-          <div className="DashBoard-header">
+          <div className="page-header">
             <div>
               <h1>Virtual Machine Instances</h1>
               <p>Manage and monitor all your virtual machine instances</p>
             </div>
             <div>
-              <div className="DashBoard-header-button" onClick={() => navigate("/addInstance")}>Create Instance</div>
+              <div className="page-header-button" onClick={() => navigate("/addInstance")}>Create Instance</div>
             </div>
           </div>
           <div className="DashBoard-filters">
             <Filter />
           </div>
-          <div className="DashBoard-instances">
+
+          <div className="page-items">
             <div className="DashBoard-menu">
               <div>Name</div>
               <div>Status</div>
@@ -122,10 +129,17 @@ function DashBoard() {
               <div>Network</div>
               <div>Actions</div>
             </div>
-            <div className="DashBoard-cards">
+            {error && <div className="error-message">{error}</div>}
+            {message && <div className="success-message">{message}</div>}
+            <div>
               {machines.map((i) => {
                 return (
-                  <InstanceCard key={i.name} instance={i} onClick={() => handleClick(i.name)} del={() => deleteVM(i.name)} />
+                  <InstanceCard
+                    key={i.name}
+                    instance={i}
+                    onClick={() => handleClick(i.name)}
+                    del={() => deleteVM(i.name)}
+                  />
                 )
               })}
             </div>
@@ -139,7 +153,7 @@ function DashBoard() {
         </div>
       ) : <Instance data={specs} onClick={handleInstance} />}
     </div>
-  )
+  );
 }
 
 export default DashBoard;

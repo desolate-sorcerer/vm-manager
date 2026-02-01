@@ -17,14 +17,15 @@ function Network() {
       const data = await res.json()
       if (!res.ok) {
         setError(data.error)
-        console.log("cant get data")
+        console.log(data.error)
       }
       else {
         setNetworks(data)
+        changeMessage(data.message)
       }
     }
     catch (err) {
-      setError("server not reachable")
+      setError(err.message)
       console.log(err.message)
     }
   })
@@ -41,15 +42,15 @@ function Network() {
       const data = await res.json()
       if (!res.ok) {
         setError(data.error)
-        console.log("failed to delete")
+        console.log(data.error)
       }
       else {
         getNetworks()
-        changeMessage(data.msg)
+        changeMessage(data.message)
       }
     }
     catch (err) {
-      setError("server not reachable");
+      setError(err.message);
       console.log(err.message);
     }
   }
@@ -65,26 +66,24 @@ function Network() {
   }, [])
 
   return (
-    <div className="Dashboard">
-      <div className="DashBoard-header">
+    <div>
+      <div className="page-header">
         <div>
           <h1>Network</h1>
           <p>Manage and monitor all your network</p>
         </div>
         <div>
-          <div className="DashBoard-header-button" onClick={() => navigate('/network/add')}>add Network</div>
+          <div className="page-header-button" onClick={() => navigate('/network/add')}>add Network</div>
         </div>
       </div>
-      <div className="DashBoard-filters">
-      </div>
-      <div className="DashBoard-instances">
+      <div className="page-items">
         <div className="Network-menu">
           <div>NAME</div>
           <div>STATUS</div>
           <div></div>
           <div>ACTIONS</div>
         </div>
-        <div className="DashBoard-cards">
+        <div>
           {networks.map((i) => {
             return (
               <NetworkCard key={i.name} network={i} onClick={() => handleClick(i.name)} />

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router"
 import PoolCard from "../../components/PoolCard/PoolCard"
 import "./Pool.css"
-
 import { useState, useEffect } from "react"
 
 function Pool() {
@@ -11,19 +10,19 @@ function Pool() {
   let navigate = useNavigate()
 
   const listAllPools = async () => {
+    setError("");
     try {
       const res = await fetch("http://localhost:5000/listAllPools");
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error)
-        console.log(data.error)
-      }
-      else {
+        setError(data.error || "Failed to fetch pools")
+        console.error(data.error)
+      } else {
         setPool(data)
       }
-    }
-    catch (err) {
+    } catch (err) {
       setError(err.message)
+      console.error(err.message)
     }
   }
 
@@ -31,44 +30,42 @@ function Pool() {
     listAllPools()
   }, [])
 
-  const handleClick = async (pool) => {
+  const handleClick = async (poolName) => {
+    setError("");
     try {
       const res = await fetch("http://localhost:5000/listVolumes", {
         method: "POST",
-        body: JSON.stringify({ name: pool }),
+        body: JSON.stringify({ name: poolName }),
         headers: {
           "Content-Type": "application/json",
         }
       })
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error)
-        console.log(data.error)
+        setError(data.error || "Failed to list volumes")
+        console.error(data.error)
+      } else {
+        navigate(`/pool/${poolName}/volumes`)
       }
-      else {
-        navigate(`/pool/${pool}/volumes`)
-      }
-    }
-    catch (err) {
+    } catch (err) {
       setError(err.message)
+      console.error(err.message)
     }
   }
 
   return (
     <div>
-      <div className="Dashboard">
-        <div className="DashBoard-header">
+      <div>
+        <div className="page-header">
           <div>
             <h1>Pools</h1>
             <p>Manage your pools</p>
           </div>
           <div>
-            <div className="DashBoard-header-button" onClick={() => navigate('/pool/add')}>add Pool</div>
+            <div className="page-header-button" onClick={() => navigate('/pool/add')}>add Pool</div>
           </div>
         </div>
-        <div className="DashBoard-filters">
-        </div>
-        <div className="DashBoard-instances">
+        <div className="page-items">
           <div className="pool-menu">
             <div>NAME</div>
             <div>AUTOSTART</div>
@@ -77,7 +74,7 @@ function Pool() {
             <div>AVAILABLE</div>
             <div>ACTIONS</div>
           </div>
-          <div className="DashBoard-cards">
+          <div>
             {pool.map((i) => {
               return (
                 <PoolCard key={i.name} pool={i} onClick={() => handleClick(i.name)} />
