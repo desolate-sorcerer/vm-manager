@@ -1,0 +1,78 @@
+# Debian package files
+*.deb
+*.dsc
+*.changes
+*.buildinfo
+*.tar.gz
+*.build
+
+# Debian build directories
+debian/files
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/*.debhelper.log
+debian/*.substvars
+debian/tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+env/
+.env
+.env.local
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.pnp.*
+
+# Vite/React
+dist/
+dist-ssr/
+*.local
+
+# Coverage
+coverage/
+*.lcov
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temp
+tmp/
+temp/

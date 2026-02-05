@@ -1,0 +1,19 @@
+Source: vm-manager
+Section: web
+Priority: optional
+Maintainer: Your Name <you@email>
+Build-Depends:
+ debhelper-compat (= 13),
+ dh-python,
+ python3-all,
+ nodejs,
+ npm
+
+Package: vm-manager
+Architecture: amd64
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ python3-gunicorn
+Description: VM Manager (Flask backend + React frontend)
+ Web-based VM management interface.
