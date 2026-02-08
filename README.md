@@ -29,7 +29,12 @@ sudo apt install ./vm-manager.deb
 ```
 
 ## Run the application
+
 ```
 # start
 sudo systemctl start vm-manger
 ```
+
+## License
+
+This project is licensed under the Apache License 2.0.

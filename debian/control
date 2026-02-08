@@ -1,7 +1,7 @@
 Source: vm-manager
 Section: web
 Priority: optional
-Maintainer: Your Name <you@email>
+Maintainer: Desolate Sorcerer <stevekoromac@gmail.com>
 Build-Depends:
  debhelper-compat (= 13),
  dh-python,
