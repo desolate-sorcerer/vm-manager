@@ -1,3 +1,2 @@
 api/                 /opt/vm-manager/
 web/dist/            /usr/share/vm-manager/web/
-debian/vm-manager.service /lib/systemd/system/

@@ -22,11 +22,10 @@ git clone https://github.com/desolate-sorcerer/vm-manager.git
 cd vm-manager
 
 # build
-./build.sh
+dpkg-buildpackage -us -uc
 
 # install
-sudo dpkg -i vm-manager.deb
-sudo apt install -f
+sudo apt install ./vm-manager.deb
 ```
 
 ## Run the application

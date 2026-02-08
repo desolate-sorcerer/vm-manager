@@ -1,6 +1,22 @@
 #!/bin/sh
 set -e
 
-systemctl daemon-reload
+# Create system user
+if ! id vm-manager >/dev/null 2>&1; then
+  adduser --system --group --home /opt/vm-manager vm-manager
+fi
+
+# Runtime directories
+mkdir -p /var/lib/vm-manager
+chown -R vm-manager:vm-manager /var/lib/vm-manager
+
+# libvirt access
+usermod -aG libvirt vm-manager || true
+
+# systemd
+systemctl daemon-reload || true
+systemctl enable vm-manager || true
+
+#DEBHELPER#
 
 exit 0

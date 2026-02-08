@@ -1,13 +1,27 @@
 [Unit]
-Description=Simple VMmanager App
-After=network.target
+Description=VM Manager API
+After=network.target libvirtd.service
+Wants=libvirtd.service
 
 [Service]
-User=www-data
-Group=www-data
-WorkingDirectory=/opt/vm-manager
-ExecStart=/opt/myapp/venv/bin/gunicorn -w 4 -b 0.0.0.0:8000 app.wsgi:app
+Type=simple
+User=vm-manager
+Group=vm-manager
+WorkingDirectory=/opt/vm-manager/api
+
+ExecStart=/usr/bin/python3 -m gunicorn \
+    --workers 2 \
+    --bind 127.0.0.1:5000 \
+    wsgi:app
+
 Restart=always
+RestartSec=5
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/vm-manager
 
 [Install]
 WantedBy=multi-user.target
