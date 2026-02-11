@@ -1,0 +1,18 @@
+[Unit]
+Description=VM Manager
+After=network.target libvirtd.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/vm-manager/api
+Environment=PYTHONPATH=/opt/vm-manager/api
+ExecStart=/usr/bin/gunicorn \
+  --workers 4 \
+  --bind 0.0.0.0:5000 \
+  wsgi:app
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
