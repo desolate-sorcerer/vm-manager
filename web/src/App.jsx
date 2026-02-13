@@ -1,3 +1,4 @@
+import Overview from './pages/Overview/Overview'
 import DashBoard from './pages/DashBoard/DashBoard'
 import Network from './pages/Network/Network'
 import AddNetwork from './pages/AddNetwork/AddNetwork'
@@ -14,7 +15,8 @@ function App() {
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<DashBoard />} />
+        <Route path='/' element={<Overview />} />
+        <Route path="/instances" element={<DashBoard />} />
         <Route path="/addInstance" element={<AddInstance />} />
         <Route path="/network" element={<Network />} />
         <Route path="/network/add" element={<AddNetwork />} />

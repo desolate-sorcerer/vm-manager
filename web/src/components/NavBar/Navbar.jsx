@@ -18,6 +18,9 @@ function SideBar() {
       </div>
       <div className="NavBar-links">
         <Link to="/" className={`${pathname == '/' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
+          <FaHome /><p>Overview</p>
+        </Link>
+        <Link to="/instances" className={`${pathname == '/instances' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
           <FaServer /><p>Instances</p>
         </Link>
         <Link to="/pool" className={`${pathname == '/pool' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
@@ -25,9 +28,6 @@ function SideBar() {
         </Link>
         <Link to="/network" className={`${pathname == '/network' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
           <FaNetworkWired /><p>Network</p>
-        </Link>
-        <Link to="/overview" className={`${pathname == '/overview' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
-          <FaHome /><p>Overview</p>
         </Link>
       </div>
       <div className="NavBar-profile">

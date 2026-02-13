@@ -14,7 +14,7 @@ function InstanceCard({ instance, onClick, del }) {
       <div>{instance.cpu}</div>
       <div>{ram}GB</div>
       <div>40GB</div>
-      <div className="InstanceCard-link">{instance.network}</div>
+      <div>{instance.network}</div>
       <div onClick={del} className="InstanceCard-link">del</div>
     </div>
   )

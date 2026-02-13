@@ -1,6 +1,4 @@
 import InstanceCard from "../../components/InstanceCard/InstanceCard";
-import DashboardContainer from "../../components/DashboardContainer/DashboardContainer";
-import Filter from "../../components/Filter/Filter"
 import Instance from "../../components/Instance/Instance"
 import "./DashBoard.css"
 import { useState, useEffect } from "react";
@@ -99,23 +97,17 @@ function DashBoard() {
 
   return (
     <div>
-
-
       {specs == null ? (
         <div>
           <div className="page-header">
             <div>
               <h1>Virtual Machine Instances</h1>
-              <p>Manage and monitor all your virtual machine instances</p>
+              <p>Manage and monitor your virtual machines</p>
             </div>
             <div>
               <div className="page-header-button" onClick={() => navigate("/addInstance")}>Create Instance</div>
             </div>
           </div>
-          <div className="DashBoard-filters">
-            <Filter />
-          </div>
-
           <div className="page-items">
             <div className="DashBoard-menu">
               <div>Name</div>
@@ -143,12 +135,6 @@ function DashBoard() {
                 )
               })}
             </div>
-          </div>
-          <div className="DashBoard-containers">
-            <DashboardContainer box={{ type: "Total Instances", data: "5" }} />
-            <DashboardContainer box={{ type: "Running", data: "0" }} />
-            <DashboardContainer box={{ type: "Stopped", data: "1" }} />
-            <DashboardContainer box={{ type: "Total vCPU", data: "15" }} />
           </div>
         </div>
       ) : <Instance data={specs} onClick={handleInstance} />}

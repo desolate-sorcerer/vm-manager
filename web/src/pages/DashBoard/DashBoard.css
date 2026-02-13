@@ -13,10 +13,12 @@
 
 .DashBoard-containers {
   width: 80%;
-  margin: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5em;
-  margin-top: 2em;
   padding-top: 2em;
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
 }
