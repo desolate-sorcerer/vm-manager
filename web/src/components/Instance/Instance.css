@@ -117,68 +117,6 @@
   background: red;
 }
 
-.instance-resource-container {
-  background: var(--third);
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-}
-
-.instance-resource-container h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-}
-
-.resource-usage {
-  display: flex;
-  gap: 2rem;
-  margin-top: 1rem;
-}
-
-.resource-item {
-  flex: 1;
-}
-
-.resource-item p {
-  color: #888;
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0 0 0.5rem 0;
-}
-
-.resource-value {
-  background: var(--secondary);
-  border-radius: 4px;
-  margin-top: 0.5rem;
-  text-align: center;
-  font-weight: 600;
-  width: 70%;
-}
-
-.resource-bar1 {
-  height: 20px;
-  background: green;
-  border-radius: 4px;
-  width: 40%;
-}
-
-.resource-bar2 {
-  height: 20px;
-  background: green;
-  border-radius: 4px;
-  width: 30%;
-}
-
-.resource-bar3 {
-  height: 20px;
-  background: orange;
-  border-radius: 4px;
-  width: 60%;
-}
-
 @media (max-width: 768px) {
   .instance-info-container {
     grid-template-columns: repeat(2, 1fr);

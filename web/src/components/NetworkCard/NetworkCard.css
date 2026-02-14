@@ -16,13 +16,7 @@
   background-color: var(--secondary);
 }
 
-.NetworkCard-link {
-  color: var(--important)
-}
 
-.NetworkCard-link:hover {
-  cursor: pointer;
-}
 
 .NetworkCard-status {
   border-radius: 5px;

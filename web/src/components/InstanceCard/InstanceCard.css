@@ -1,8 +1,8 @@
 .InstanceCard-card {
   width: 100%;
   display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1.5fr 0.8fr 0.8fr 0.8fr 1.2fr 0.8fr;
-  gap: 2em;
+  grid-template-columns: 0.5fr 4fr 1fr 1fr 1fr 0.3fr;
+  gap: 3em;
   padding: 1em 1.5em;
   margin: 0;
   transition: all 0.2s ease-in-out;
@@ -20,6 +20,14 @@
   color: var(--important)
 }
 
+.InstanceCard-del {
+  color: red;
+}
+
+.InstanceCard-del:hover {
+  cursor: pointer;
+}
+
 .InstanceCard-link:hover {
   cursor: pointer;
 }
@@ -29,6 +37,7 @@
   border: 1px solid;
   padding: 3px 1em;
   font-weight: 600;
+  width: 15%;
 }
 
 .paused {

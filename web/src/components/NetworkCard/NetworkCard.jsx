@@ -1,4 +1,5 @@
 import "./NetworkCard.css"
+import { FaTrashAlt } from "react-icons/fa";
 
 function NetworkCard({ network, onClick }) {
   return (
@@ -6,7 +7,7 @@ function NetworkCard({ network, onClick }) {
       <div>{network.name}</div>
       <div className="NetworkCard-status">{network.status}</div>
       <div></div>
-      <div className="NetworkCard-link" onClick={onClick}>del</div>
+      <div className="InstanceCard-del" onClick={onClick}><FaTrashAlt /></div>
     </div>
   )
 }

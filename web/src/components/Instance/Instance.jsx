@@ -47,24 +47,8 @@ function Instance({ data, onClick }) {
           <p>{data.status}</p>
         </div>
         <div className="instance-info-box">
-          <p>PRIVATE IP</p>
-          <p>192.168.1.122</p>
-        </div>
-        <div className="instance-info-box">
-          <p>PUBLIC IP</p>
-          <p>53.222.1.212</p>
-        </div>
-        <div className="instance-info-box">
           <p>vCPU</p>
           <p>{data.cpu} cores</p>
-        </div>
-        <div className="instance-info-box">
-          <p>DISK</p>
-          <p>50GB</p>
-        </div>
-        <div className="instance-info-box">
-          <p>REGION</p>
-          <p>Ptuj</p>
         </div>
         <div className="instance-info-box">
           <p>MEMORY</p>
@@ -100,34 +84,6 @@ function Instance({ data, onClick }) {
           </div>
         </div>
       </div>
-
-      <div className="instance-resource-container">
-        <h3>Resource Usage</h3>
-        <div className="resource-usage">
-          <div className="resource-item">
-            <p>CPU</p>
-            <div className="resource-value">
-              <div className="resource-bar1">
-              </div>
-            </div>
-          </div>
-          <div className="resource-item">
-            <p>RAM</p>
-            <div className="resource-value">
-              <div className="resource-bar2">
-              </div>
-            </div>
-          </div>
-          <div className="resource-item">
-            <p>DISK</p>
-            <div className="resource-value">
-              <div className="resource-bar3">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   )
 }

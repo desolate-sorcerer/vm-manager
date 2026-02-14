@@ -112,12 +112,8 @@ function DashBoard() {
             <div className="DashBoard-menu">
               <div>Name</div>
               <div>Status</div>
-              <div>Region</div>
-              <div>Private IP</div>
-              <div>Public IP</div>
               <div>vCPU</div>
               <div>Memory</div>
-              <div>Disk</div>
               <div>Network</div>
               <div>Actions</div>
             </div>
