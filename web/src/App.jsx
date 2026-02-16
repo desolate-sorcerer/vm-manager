@@ -6,6 +6,7 @@ import Volume from './pages/Volume/Volume'
 import NavBar from "./components/NavBar/Navbar"
 import AddVolume from './pages/AddVolume/AddVolume'
 import AddInstance from './pages/AddInstance/AddInstance'
+import Instance from './pages/Instance/Instance'
 import { Routes, Route } from "react-router"
 import "./App.css"
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path='/pool' element={<Pool />} />
         <Route path='/pool/:pool/volumes' element={<Volume />} />
         <Route path='/pool/:pool/volumes/add' element={<AddVolume />} />
+        <Route path='/instance/:machineName' element={<Instance />} />
       </Routes>
     </>
   )

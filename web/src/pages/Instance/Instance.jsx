@@ -9,7 +9,7 @@ import { useParams, useNavigate } from "react-router";
 
 
 
-function Instance() {
+function Instance({ onClick }) {
   const { machineName } = useParams()
   const [message, setMessage] = useState('');
   const [error, setError] = useState('')
@@ -44,10 +44,6 @@ function Instance() {
     getData(machineName)
   }, [])
 
-  const goBack = () => {
-    navigate('/network')
-  }
-
 
 
   const handleState = async (opt) => {
@@ -68,6 +64,11 @@ function Instance() {
       setMessage({ error })
     }
   }
+
+  const goBack = () => {
+    navigate('/')
+  }
+
 
   const ram = Math.floor(machine.ram / 1000000)
   return (

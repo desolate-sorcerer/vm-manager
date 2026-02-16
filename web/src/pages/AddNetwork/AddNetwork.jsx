@@ -30,7 +30,7 @@ function AddNetwork() {
       if (!response.ok) {
         setError(data.error || "Failed to add network");
       } else {
-        changeMessage(data.msg);
+        changeMessage(data.message);
         setName("");
       }
     } catch (err) {

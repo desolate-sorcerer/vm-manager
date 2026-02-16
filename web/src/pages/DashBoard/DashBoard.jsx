@@ -1,5 +1,4 @@
 import InstanceCard from "../../components/InstanceCard/InstanceCard";
-import Instance from "../../components/Instance/Instance"
 import "./DashBoard.css"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
@@ -8,7 +7,8 @@ function DashBoard() {
   const [machines, setMachines] = useState([]);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [specs, setSpecs] = useState(null);
+
+  let navigate = useNavigate();
 
   const getXML = async () => {
     setError("");
@@ -54,7 +54,7 @@ function DashBoard() {
       if (!res.ok) {
         setError(data.error);
       } else {
-        setSpecs(data);
+        navigate(`/instance/${machineName}`)
       }
     } catch (err) {
       setError(err.message);
@@ -62,12 +62,7 @@ function DashBoard() {
     }
   };
 
-  function handleInstance() {
-    setSpecs(null);
-    setError("");
-  }
 
-  let navigate = useNavigate();
 
   const deleteVM = async (name) => {
     setError("");
@@ -97,43 +92,41 @@ function DashBoard() {
 
   return (
     <div>
-      {specs == null ? (
-        <div>
-          <div className="page-header">
-            <div>
-              <h1>Virtual Machine Instances</h1>
-              <p>Manage and monitor your virtual machines</p>
-            </div>
-            <div>
-              <div className="page-header-button" onClick={() => navigate("/addInstance")}>Create Instance</div>
-            </div>
+      <div>
+        <div className="page-header">
+          <div>
+            <h1>Virtual Machine Instances</h1>
+            <p>Manage and monitor your virtual machines</p>
           </div>
-          <div className="page-items">
-            <div className="DashBoard-menu">
-              <div>Name</div>
-              <div>Status</div>
-              <div>vCPU</div>
-              <div>Memory</div>
-              <div>Network</div>
-              <div>Actions</div>
-            </div>
-            {error && <div className="error-message">{error}</div>}
-            {message && <div className="success-message">{message}</div>}
-            <div>
-              {machines.map((i) => {
-                return (
-                  <InstanceCard
-                    key={i.name}
-                    instance={i}
-                    onClick={() => handleClick(i.name)}
-                    del={() => deleteVM(i.name)}
-                  />
-                )
-              })}
-            </div>
+          <div>
+            <div className="page-header-button" onClick={() => navigate("/addInstance")}>Create Instance</div>
           </div>
         </div>
-      ) : <Instance data={specs} onClick={handleInstance} />}
+        <div className="page-items">
+          <div className="DashBoard-menu">
+            <div>Name</div>
+            <div>Status</div>
+            <div>vCPU</div>
+            <div>Memory</div>
+            <div>Network</div>
+            <div>Actions</div>
+          </div>
+          {error && <div className="error-message">{error}</div>}
+          {message && <div className="success-message">{message}</div>}
+          <div>
+            {machines.map((i) => {
+              return (
+                <InstanceCard
+                  key={i.name}
+                  instance={i}
+                  onClick={() => handleClick(i.name)}
+                  del={() => deleteVM(i.name)}
+                />
+              )
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
