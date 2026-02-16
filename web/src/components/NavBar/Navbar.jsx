@@ -5,7 +5,6 @@ import { FaUser } from "react-icons/fa";
 import { FaNetworkWired } from "react-icons/fa6";
 import { FaServer } from "react-icons/fa6";
 import { FaHardDrive } from "react-icons/fa6";
-import { FaHome } from "react-icons/fa";
 
 function SideBar() {
   const pathname = useLocation().pathname
@@ -18,9 +17,6 @@ function SideBar() {
       </div>
       <div className="NavBar-links">
         <Link to="/" className={`${pathname == '/' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
-          <FaHome /><p>Overview</p>
-        </Link>
-        <Link to="/instances" className={`${pathname == '/instances' ? 'isActive NavBar-link' : 'NavBar-link'}`}>
           <FaServer /><p>Instances</p>
         </Link>
         <Link to="/pool" className={`${pathname == '/pool' ? 'isActive NavBar-link' : 'NavBar-link'}`}>

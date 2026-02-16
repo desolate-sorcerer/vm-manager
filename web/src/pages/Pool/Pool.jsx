@@ -62,7 +62,7 @@ function Pool() {
             <p>Manage your pools</p>
           </div>
           <div>
-            <div className="page-header-button" onClick={() => navigate('/pool/add')}>add Pool</div>
+            <div></div>
           </div>
         </div>
         <div className="page-items">
