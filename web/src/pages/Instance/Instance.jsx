@@ -6,14 +6,16 @@ import { FaPause } from "react-icons/fa6";
 import { FaRegSquare } from "react-icons/fa6";
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from "react-router";
+import { PiPlaceholder } from "react-icons/pi";
 
 
 
-function Instance({ onClick }) {
+function Instance() {
   const { machineName } = useParams()
   const [message, setMessage] = useState('');
   const [error, setError] = useState('')
   const [machine, setMachine] = useState({})
+  const [name, setName] = useState('')
 
   let navigate = useNavigate()
 
@@ -42,7 +44,7 @@ function Instance({ onClick }) {
 
   useEffect(() => {
     getData(machineName)
-  }, [])
+  }, [machineName])
 
 
 
@@ -55,13 +57,16 @@ function Instance({ onClick }) {
           "Content-Type": "application/json",
         }
       })
-      const result = await res.json()
-      if (res.ok) {
-        setMessage(result.msg)
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || "error")
+      }
+      else {
+        setMessage(data.msg)
       }
     }
-    catch (error) {
-      setMessage({ error })
+    catch (err) {
+      setError(err.message)
     }
   }
 
@@ -69,8 +74,35 @@ function Instance({ onClick }) {
     navigate('/')
   }
 
+  const createFromTemplate = async (name) => {
+    if (!name) {
+      setError("Name is required")
+      return
+    }
 
-  const ram = Math.floor(machine.ram / 1000000)
+    try {
+      const res = await fetch("http://localhost:5000/api/createFromTemplate", {
+        method: 'POST',
+        body: JSON.stringify({ template: machineName, name: name }),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error)
+      }
+      else {
+        setMessage(data.message)
+      }
+    }
+    catch (err) {
+      setError(err.message)
+    }
+  }
+
+
+  const ram = Math.floor(machine.ram / (1024 * 1024))
   return (
     <div className="instance">
       <div className="instance-header">
@@ -123,6 +155,11 @@ function Instance({ onClick }) {
             <button >shutDown</button>
           </div>
         </div>
+      </div>
+
+      <div className="instance-template">
+        <input type="text" placeholder="new_name" required value={name} onChange={e => setName(e.target.value)} />
+        <button onClick={() => createFromTemplate(name)}>Create VM from template</button>
       </div>
       {error && <div className="error-message">{error}</div>}
       {message && <div className="success-message">{message}</div>}

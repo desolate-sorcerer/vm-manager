@@ -51,7 +51,7 @@ class InstanceService:
                         name_elements = xml.getElementsByTagName("name")
                         name = name_elements[0].firstChild.data if name_elements else "No name"
 
-                        # get ram
+                       # get ram
                         ram_elements = xml.getElementsByTagName("memory")
                         ram = ram_elements[0].firstChild.data if ram_elements else "0"
 
@@ -279,13 +279,31 @@ class InstanceService:
         conn = None
         vm_uuid = str(uuid.uuid4())
 
-        os_section = f"""
-        <os>
-          <type arch='x86_64'>hvm</type>
-          <boot dev='cdrom'/>
-          <boot dev='hd'/>
-        </os>
-        """
+        iso_section = ""
+        if iso:
+            os_section = f"""
+            <os>
+              <type arch='x86_64'>hvm</type>
+              <boot dev='cdrom'/>
+              <boot dev='hd'/>
+            </os>
+            """
+            iso_section = f"""
+                <disk type='file' device='cdrom'>
+                  <driver name='qemu' type='raw'/>
+                  <source file='{iso}'/>
+                  <target dev='hdc' bus='ide'/>
+                  <readonly/>
+                </disk>
+            """
+
+        else:
+            os_section = f"""
+            <os>
+              <type arch='x86_64'>hvm</type>
+              <boot dev='hd'/>
+            </os>
+            """
 
         devices_section = f"""
         <!-- Disk -->
@@ -295,13 +313,7 @@ class InstanceService:
           <target dev='vda' bus='virtio'/>
         </disk>
 
-        <!-- CD-ROM ISO -->
-        <disk type='file' device='cdrom'>
-          <driver name='qemu' type='raw'/>
-          <source file='{iso}'/>
-          <target dev='hdc' bus='ide'/>
-          <readonly/>
-        </disk>
+        {iso_section}
 
         <!-- Network -->
         <interface type='network'>
@@ -336,6 +348,64 @@ class InstanceService:
         except libvirt.libvirtError as e:
             return jsonify({"error": str(e)}), 500
 
+        finally:
+            if conn:
+                conn.close()
+
+
+    def createFromTemplate(self, template, name):
+        conn = None
+        instance = DatabaseServices.getInstance(template)
+        if not instance:
+            return jsonify({"error": "instance not found"}), 404
+        try:
+            conn = libvirt.open(instance.uri)
+            if not conn:
+                return jsonify({"error": "cannot open libvirt connection"}), 500
+
+            dom = conn.lookupByName(template)
+            xml = dom.XMLDesc()
+            parsed = minidom.parseString(xml)
+
+            memory = parsed.getElementsByTagName("memory")[0].firstChild.data
+            memory = str(int(memory) // 1024)
+            vcpu = parsed.getElementsByTagName("vcpu")[0].firstChild.data
+            interface = parsed.getElementsByTagName("interface")[0]
+            network = interface.getElementsByTagName("source")[0].getAttribute("network")
+
+            disks = parsed.getElementsByTagName("disk")
+            path = None
+            for disk in disks:
+                if disk.getAttribute("device") == "disk":
+                    source = disk.getElementsByTagName("source")[0]
+                    path = source.getAttribute("file") or source.getAttribute("dev")
+                    break
+
+            vol = conn.storageVolLookupByPath(path)
+            pool_obj = vol.storagePoolLookupByVolume()
+            pool_name = pool_obj.name()
+
+            capacity = vol.info()[1]
+
+            label = name + ".qcow2"
+
+            new_vol = pool_obj.createXMLFrom(f"""
+            <volume>
+              <name>{label}</name>
+              <capacity unit='bytes'>{capacity}</capacity>
+              <target>
+                <format type='qcow2'/>
+              </target>
+            </volume>
+            """, vol, 0)
+
+            new_path = new_vol.path()
+
+            self.addInstance(name, memory, vcpu, new_path, "", network)
+            return jsonify({"message": "VM created from template"}), 200
+
+        except Exception as e:
+            return jsonify({"error": str(e)})
         finally:
             if conn:
                 conn.close()

@@ -61,3 +61,11 @@ def rmInstance():
     data = request.get_json()
     name = data.get("name")
     return instance.rmInstance(name)
+
+@instance_bp.route('/createFromTemplate', methods=["POST"])
+def createFromTemplate():
+    instance = InstanceService()
+    data = request.get_json()
+    name = data.get("name")
+    template = data.get("template")
+    return instance.createFromTemplate(template,name)

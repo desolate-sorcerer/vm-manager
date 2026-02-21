@@ -111,8 +111,6 @@ function DashBoard() {
             <div>Network</div>
             <div>Actions</div>
           </div>
-          {error && <div className="error-message">{error}</div>}
-          {message && <div className="success-message">{message}</div>}
           <div>
             {machines.map((i) => {
               return (
@@ -125,6 +123,8 @@ function DashBoard() {
               )
             })}
           </div>
+          {error && <div className="error-message">{error}</div>}
+          {message && <div className="success-message">{message}</div>}
         </div>
       </div>
     </div>

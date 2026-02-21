@@ -117,6 +117,38 @@
   background: red;
 }
 
+.instance-template {
+  background: var(--third);
+  padding: 2em 1.5em;
+  border-radius: 10px;
+}
+
+.instance-template button {
+  background: var(--important);
+  padding: 0.5em 2em;
+  color: var(--text);
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  transition: 0.2s ease-out;
+}
+
+.instance-template input {
+  background: transparent;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid var(--important);
+  font-size: 18px;
+  padding: 0.5em 0.5em;
+  margin-right: 2em;
+  color: var(--text-color);
+}
+
+.instance-template button:hover {
+  cursor: pointer;
+  filter: brightness(0.8);
+}
+
 @media (max-width: 768px) {
   .instance-info-container {
     grid-template-columns: repeat(2, 1fr);

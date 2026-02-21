@@ -61,7 +61,7 @@ function AddInstance() {
         <input
           type="text"
           className="add-volume-input"
-          placeholder="memory"
+          placeholder="memory(MB)"
           value={memory}
           onChange={(e) => setMemory(e.target.value)}
           required
