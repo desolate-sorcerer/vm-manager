@@ -14,7 +14,7 @@
 
 3. Libvirt
 
-## Installation
+## Ubuntu
 
 ```
 git clone https://github.com/desolate-sorcerer/vm-manager.git
@@ -26,6 +26,16 @@ dpkg-buildpackage -us -uc
 
 # install
 sudo apt install ./vm-manager.deb
+```
+
+## Arch
+
+```
+git clone https://github.com/desolate-sorcerer/arch-vm-manager.git
+
+cd vm-manager
+
+makepkg -si
 ```
 
 ## Run the application

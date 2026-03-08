@@ -180,9 +180,9 @@ class InstanceService:
             return jsonify({"message": "instance started successfully"}), 200
 
         except libvirt.libvirtError as e:
-            return jsonify({"error":  e})
+            return jsonify({"error":  str(e)})
         except Exception as e:
-            return jsonify({"error": e})
+            return jsonify({"error": str(e)})
 
         finally:
             if conn:
