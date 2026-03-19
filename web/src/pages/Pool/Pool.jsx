@@ -12,7 +12,7 @@ function Pool() {
   const listAllPools = async () => {
     setError("");
     try {
-      const res = await fetch("http://localhost:5000/listAllPools");
+      const res = await fetch("http://localhost:5000/api/listAllPools");
       const data = await res.json()
       if (!res.ok) {
         setError(data.error || "Failed to fetch pools")
@@ -33,7 +33,7 @@ function Pool() {
   const handleClick = async (poolName) => {
     setError("");
     try {
-      const res = await fetch("http://localhost:5000/listVolumes", {
+      const res = await fetch("http://localhost:5000/api/listVolumes", {
         method: "POST",
         body: JSON.stringify({ name: poolName }),
         headers: {

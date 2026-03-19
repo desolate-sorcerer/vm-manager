@@ -21,17 +21,17 @@ def create_app():
     from app.routes.instance_routes import instance_bp
     from app.routes.network_routes import network_bp
     from app.routes.volume_routes import volume_bp
-    app.register_blueprint(volume_bp)
-    app.register_blueprint(network_bp)
+    app.register_blueprint(volume_bp, url_prefix='/api')
+    app.register_blueprint(network_bp, url_prefix='/api')
     app.register_blueprint(instance_bp, url_prefix='/api')
 
     @app.route("/")
     def frontend():
         return send_from_directory(Config.TEMPLATE_FOLDER, "index.html")
 
-    @app.route("/<path:path>")
-    def static_proxy(path):
-        return send_from_directory(Config.TEMPLATE_FOLDER, path)
+    @app.errorhandler(404)
+    def not_found(e):
+        return app.send_static_file(Config.TEMPLATE_FOLDER, 'index.html')
 
 
     return app

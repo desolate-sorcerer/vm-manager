@@ -13,7 +13,7 @@ function Volume() {
   const listVolumes = async (poolName) => {
     setError("");
     try {
-      const res = await fetch("http://localhost:5000/listVolumes", {
+      const res = await fetch("http://localhost:5000/api/listVolumes", {
         method: "POST",
         body: JSON.stringify({ name: poolName }),
         headers: {
@@ -43,7 +43,7 @@ function Volume() {
     setError("");
     setMessage("");
     try {
-      const res = await fetch("http://localhost:5000/deleteVolume", {
+      const res = await fetch("http://localhost:5000/api/deleteVolume", {
         method: "POST",
         body: JSON.stringify({ name: volumeName, pool: pool }),
         headers: {
