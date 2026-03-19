@@ -29,9 +29,9 @@ def create_app():
     def frontend():
         return send_from_directory(Config.TEMPLATE_FOLDER, "index.html")
 
-    @app.errorhandler(404)
-    def not_found(e):
-        return app.send_static_file(Config.TEMPLATE_FOLDER, 'index.html')
+    @app.route('/<path:path>')
+    def catch_all(path):
+        return render_template("index.html")
 
 
     return app
