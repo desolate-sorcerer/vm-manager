@@ -46,64 +46,76 @@ function AddInstance() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="add-volume-form">
-        <h2>Create VM Instance</h2>
+      <form onSubmit={handleSubmit} className="add-form">
+        <h2 className="add-form-header">Create VM Instance</h2>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Name</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="memory(MB)"
-          value={memory}
-          onChange={(e) => setMemory(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Memory</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={memory}
+            onChange={(e) => setMemory(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="vcpu"
-          value={vcpu}
-          onChange={(e) => setVcpu(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Vcpu</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={vcpu}
+            onChange={(e) => setVcpu(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="path"
-          value={path}
-          onChange={(e) => setPath(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Path</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={path}
+            onChange={(e) => setPath(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="iso"
-          value={iso}
-          onChange={(e) => setIso(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Iso</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={iso}
+            onChange={(e) => setIso(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="network"
-          value={network}
-          onChange={(e) => setNetwork(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Network</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={network}
+            onChange={(e) => setNetwork(e.target.value)}
+            required
+          />
+        </div>
 
-        <button type="submit" className="add-volume-submit">Create</button>
+        <button type="submit" className="add-form-submit">Create</button>
 
         {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}

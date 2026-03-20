@@ -41,28 +41,32 @@ function AddVolume() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="add-volume-form">
-        <h2>Create Storage Volume</h2>
+      <form onSubmit={handleSubmit} className="add-form">
+        <h2 className="add-form-header">Create Storage Volume</h2>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="Label"
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Label</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="text"
-          className="add-volume-input"
-          placeholder="Capacity (GB)"
-          value={capacity}
-          onChange={(e) => setCapacity(e.target.value)}
-          required
-        />
+        <div>
+          <p className="add-form-label">Capacity</p>
+          <input
+            type="text"
+            className="add-form-input"
+            value={capacity}
+            onChange={(e) => setCapacity(e.target.value)}
+            required
+          />
+        </div>
 
-        <button type="submit" className="add-volume-submit">Create</button>
+        <button type="submit" className="add-form-submit">Create</button>
 
         {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}

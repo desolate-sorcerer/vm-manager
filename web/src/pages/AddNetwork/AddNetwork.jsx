@@ -45,20 +45,21 @@ function AddNetwork() {
   }
 
   return (
-    <div className="add-network-container">
-      <h2>Add New Network</h2>
+    <div>
+      <form className="add-form" onSubmit={handleSubmit}>
+        <h2 className="add-form-header">Add New Network</h2>
+        <div>
+          <p className="add-form-label">Network name</p>
+          <input
+            className="add-form-input"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
 
-      <form className="add-network-form" onSubmit={handleSubmit}>
-        <input
-          className="add-network-input"
-          type="text"
-          placeholder="Enter network name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-
-        <button className="add-network-button" type="submit">
+        <button className="add-form-submit" type="submit">
           Add Network
         </button>
       </form>
