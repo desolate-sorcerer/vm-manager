@@ -7,7 +7,10 @@ import NavBar from "./components/NavBar/Navbar"
 import AddVolume from './pages/AddVolume/AddVolume'
 import AddInstance from './pages/AddInstance/AddInstance'
 import Instance from './pages/Instance/Instance'
-import { Routes, Route } from "react-router"
+import Login from './pages/Login/Login'
+import ChangePassword from './pages/ChangePaswword/ChangePassword'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import { Routes, Route, Navigate } from "react-router"
 import "./App.css"
 function App() {
 
@@ -15,14 +18,19 @@ function App() {
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<DashBoard />} />
-        <Route path="/addInstance" element={<AddInstance />} />
-        <Route path="/network" element={<Network />} />
-        <Route path="/network/add" element={<AddNetwork />} />
-        <Route path='/pool' element={<Pool />} />
-        <Route path='/pool/:pool/volumes' element={<Volume />} />
-        <Route path='/pool/:pool/volumes/add' element={<AddVolume />} />
-        <Route path='/instance/:machineName' element={<Instance />} />
+        <Route path='/login' element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<DashBoard />} />
+          <Route path="/addInstance" element={<AddInstance />} />
+          <Route path="/network" element={<Network />} />
+          <Route path="/network/add" element={<AddNetwork />} />
+          <Route path='/pool' element={<Pool />} />
+          <Route path='/pool/:pool/volumes' element={<Volume />} />
+          <Route path='/pool/:pool/volumes/add' element={<AddVolume />} />
+          <Route path='/instance/:machineName' element={<Instance />} />
+          <Route path='/changePassword' element={<ChangePassword />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </>
   )

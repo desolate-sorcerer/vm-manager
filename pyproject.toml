@@ -8,6 +8,7 @@ dependencies = [
     "flask-cors",
     "libvirt-python",
     "psycopg2"
+    "flask-login"
 ]
 
 [build-system]

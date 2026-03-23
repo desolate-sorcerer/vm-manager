@@ -15,6 +15,7 @@ Depends:
  ${misc:Depends},
  python3,
  python3-flask,
+ python-flask-login,
  python3-flask-cors,
  python3-sqlalchemy,
  python3-psycopg2,

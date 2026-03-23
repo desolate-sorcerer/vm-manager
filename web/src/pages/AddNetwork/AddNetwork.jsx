@@ -1,4 +1,3 @@
-import "./AddNetwork.css"
 import { useState } from "react"
 
 function AddNetwork() {

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import "./AddInstance.css"
 
 function AddInstance() {
   const [name, setName] = useState("");

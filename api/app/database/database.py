@@ -1,7 +1,7 @@
 import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker
-from app.models.models import Base, Networks, Instances
 import logging
+from app.models.models import Base, Networks, Instances, User
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,51 @@ class DatabaseServices:
         except Exception as e:
             logger.error(f"Failed to create tables: {e}")
             return False
+
+    @staticmethod
+    def create_default_admin():
+        session = Session()
+        try:
+            if session.query(User).filter_by(username="admin").first() is None:
+                admin = User(username="admin")
+                admin.set_password("admin")
+                session.add(admin)
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Error adding admin: {e}")
+            raise
+        finally:
+            session.close()
+
+    @staticmethod
+    def get_user_by_username(username: str):
+        session = Session()
+        try:
+            return session.query(User).filter_by(username=username).first()
+        except Exception as e:
+            logger.error(f"Error fetching user {username}: {e}")
+            return None
+        finally:
+            session.close()
+
+    @staticmethod
+    def update_user_password(user: User, new_password: str):
+        session = Session()
+        try:
+            db_user = session.query(User).get(user.id)
+            if db_user:
+                db_user.set_password(new_password)
+                session.commit()
+                logger.info(f"Password updated for user {db_user.username}")
+                return True
+            return False
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Error updating password: {e}")
+            raise
+        finally:
+            session.close()
 
     @staticmethod
     def queryDesc():
