@@ -31,46 +31,49 @@ function ChangePassword() {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Change Password</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Current Password</label>
+    <div >
+      <form onSubmit={handleSubmit} className="add-form">
+        <h2 className='add-form-header'>Change Password</h2>
+        <div>
+          <p className='add-form-label'>Current Password</p>
           <input
             type="password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
             required
             autoComplete="current-password"
+            className='add-form-input'
           />
         </div>
 
-        <div className="form-group">
-          <label>New Password</label>
+        <div>
+          <p className='add-form-label'>New Password</p>
           <input
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
             autoComplete="new-password"
+            className='add-form-input'
           />
         </div>
 
-        <div className="form-group">
-          <label>Confirm New Password</label>
+        <div>
+          <p className='add-form-label'>Confirm New Password</p>
           <input
             type="password"
             value={confirmNew}
             onChange={(e) => setConfirmNew(e.target.value)}
             required
             autoComplete="new-password"
+            className='add-form-input'
           />
         </div>
 
         {error && <div className="error">{error}</div>}
         {message && <div className="success">{message}</div>}
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className='add-form-submit'>
           {loading ? 'Changing...' : 'Change Password'}
         </button>
       </form>

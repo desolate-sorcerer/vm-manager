@@ -1,13 +1,40 @@
 import "./Navbar.css"
-import { Link } from "react-router"
-import { useLocation } from "react-router";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { FaNetworkWired } from "react-icons/fa6";
 import { FaServer } from "react-icons/fa6";
 import { FaHardDrive } from "react-icons/fa6";
+import { useState, useEffect, useRef } from 'react'
+import { useAuth } from "../../context/AuthContext";
+
 
 function SideBar() {
+  const [open, setOpen] = useState(false)
   const pathname = useLocation().pathname
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+  const menuRef = useRef();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
+  const handleChangePassword = () => {
+    navigate('/change-password');
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="NavBar">
       <div className="NavBar-home">
@@ -26,8 +53,21 @@ function SideBar() {
           <FaNetworkWired /><p>Network</p>
         </Link>
       </div>
-      <div className="NavBar-profile">
-        <div><FaUser /></div>
+      <div className="NavBar-profile" ref={menuRef}>
+        <div onClick={() => setOpen(!open)}>
+          <FaUser />
+        </div>
+
+        {open && (
+          <div className="dropdown">
+            <button onClick={handleChangePassword}>
+              Change Password
+            </button>
+            <button onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

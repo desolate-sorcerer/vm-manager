@@ -26,37 +26,39 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Admin Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username</label>
+    <>
+      <form onSubmit={handleSubmit} className='add-form'>
+        <h2 className='add-form-header'>Login</h2>
+        <div>
+          <p className='add-form-label'>Username</p>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
             autoComplete="username"
+            className='add-form-input'
           />
         </div>
 
-        <div className="form-group">
-          <label>Password</label>
+        <div>
+          <p className='add-form-label'>Password</p>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="current-password"
+            className='add-form-input'
           />
         </div>
 
         {error && <div className="error">{error}</div>}
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className='add-form-submit'>
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
-    </div>
+    </>
   );
 }

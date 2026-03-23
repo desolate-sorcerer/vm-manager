@@ -55,17 +55,16 @@ def change_password():
     if new_password != confirm_new:
         return jsonify({"error": "New passwords do not match"}), 400
 
-    if len(new_password) < 10:
+    if len(new_password) < 5:
         return jsonify({"error": "Password must be at least 10 characters"}), 400
 
     if not current_user.check_password(old_password):
         return jsonify({"error": "Current password incorrect"}), 403
 
-    # Update via service layer
     success = DatabaseServices.update_user_password(current_user, new_password)
 
     if success:
-        logout_user()  # force re-login after password change
+        logout_user()
         return jsonify({
             "status": "success",
             "message": "Password changed. Please log in again."

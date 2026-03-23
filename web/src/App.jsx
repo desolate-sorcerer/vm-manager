@@ -28,7 +28,7 @@ function App() {
           <Route path='/pool/:pool/volumes' element={<Volume />} />
           <Route path='/pool/:pool/volumes/add' element={<AddVolume />} />
           <Route path='/instance/:machineName' element={<Instance />} />
-          <Route path='/changePassword' element={<ChangePassword />} />
+          <Route path='/change-password' element={<ChangePassword />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
