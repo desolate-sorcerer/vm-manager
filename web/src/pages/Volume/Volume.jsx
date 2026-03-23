@@ -18,7 +18,8 @@ function Volume() {
         body: JSON.stringify({ name: poolName }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       })
       const data = await res.json()
       if (!res.ok) {
@@ -48,7 +49,8 @@ function Volume() {
         body: JSON.stringify({ name: volumeName, pool: pool }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       })
       const data = await res.json()
       if (!res.ok) {

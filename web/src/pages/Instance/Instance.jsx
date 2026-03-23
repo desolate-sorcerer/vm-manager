@@ -27,7 +27,8 @@ function Instance() {
         body: JSON.stringify({ name: machineName }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       });
       const data = await res.json();
 
@@ -55,7 +56,8 @@ function Instance() {
         body: JSON.stringify({ name: machine.name, option: opt }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       })
       const data = await res.json()
       if (!res.ok) {
@@ -86,7 +88,8 @@ function Instance() {
         body: JSON.stringify({ template: machineName, name: name }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       })
       const data = await res.json()
       if (!res.ok) {

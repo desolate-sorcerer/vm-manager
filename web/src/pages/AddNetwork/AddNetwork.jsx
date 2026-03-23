@@ -22,6 +22,7 @@ function AddNetwork() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name }),
+        credentials: 'include'
       });
 
       const data = await response.json();

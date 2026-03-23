@@ -23,6 +23,7 @@ function AddVolume() {
           label,
           capacity,
         }),
+        credentials: 'include'
       });
 
       const data = await res.json();

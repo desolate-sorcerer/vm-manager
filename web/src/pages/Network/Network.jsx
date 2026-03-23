@@ -13,7 +13,9 @@ function Network() {
 
   const getNetworks = (async () => {
     try {
-      const res = await fetch("/api/getNetworks")
+      const res = await fetch("/api/getNetworks", {
+        credentials: 'include'
+      })
       const data = await res.json()
       if (!res.ok) {
         setError(data.error)
@@ -37,7 +39,8 @@ function Network() {
         body: JSON.stringify({ name: network }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       });
       const data = await res.json()
       if (!res.ok) {

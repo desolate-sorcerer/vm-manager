@@ -13,7 +13,9 @@ function DashBoard() {
   const getXML = async () => {
     setError("");
     try {
-      const store = await fetch("/api/storeDesc");
+      const store = await fetch("/api/storeDesc", {
+        credentials: 'include'
+      });
       const storeData = await store.json();
 
       if (!store.ok) {
@@ -21,7 +23,9 @@ function DashBoard() {
         return;
       }
 
-      const res = await fetch("/api/getDesc");
+      const res = await fetch("/api/getDesc", {
+        credentials: 'include'
+      });
       const data = await res.json();
 
       if (!res.ok) {
@@ -47,7 +51,8 @@ function DashBoard() {
         body: JSON.stringify({ name: machineName }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       });
       const data = await res.json();
 
@@ -73,7 +78,8 @@ function DashBoard() {
         body: JSON.stringify({ name }),
         headers: {
           "Content-Type": "application/json"
-        }
+        },
+        credentials: 'include'
       });
 
       const data = await res.json();

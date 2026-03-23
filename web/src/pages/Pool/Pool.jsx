@@ -12,7 +12,9 @@ function Pool() {
   const listAllPools = async () => {
     setError("");
     try {
-      const res = await fetch("/api/listAllPools");
+      const res = await fetch("/api/listAllPools", {
+        credentials: 'include'
+      });
       const data = await res.json()
       if (!res.ok) {
         setError(data.error || "Failed to fetch pools")
@@ -38,7 +40,8 @@ function Pool() {
         body: JSON.stringify({ name: poolName }),
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        credentials: 'include'
       })
       const data = await res.json()
       if (!res.ok) {

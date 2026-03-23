@@ -28,6 +28,7 @@ function AddInstance() {
           iso,
           network
         }),
+        credentials: 'include'
       });
 
       const data = await res.json();
