@@ -20,7 +20,10 @@ def create_app():
         template_folder=Config.TEMPLATE_FOLDER,
     )
     app.config.from_object(Config)
-    CORS(app, supports_credentials=True)
+    CORS(app,
+         supports_credentials=True,
+         origins=["http://localhost:3000", "https://yourDomain.com"])
+
 
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"
@@ -53,22 +56,13 @@ def create_app():
     app.register_blueprint(instance_bp, url_prefix='/api')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
-    
-#    @app.route("/")
-#    def frontend():
-#        return send_from_directory(Config.TEMPLATE_FOLDER, "index.html")
+    @app.route("/")
+    def frontend():
+        return send_from_directory(Config.TEMPLATE_FOLDER, "index.html")
 
-#    @app.route('/<path:path>')
-#    def catch_all(path):
-#        return render_template("index.html")
-
-    @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')
-    def serve_spa(path):
-        if path.startswith('api/') or path.startswith('assets/'):
-            return "Not Found", 404
-
-        return send_from_directory(Config.TEMPLATE_FOLDER, 'index.html')
+    def catch_all(path):
+        return render_template("index.html")
 
 
     return app

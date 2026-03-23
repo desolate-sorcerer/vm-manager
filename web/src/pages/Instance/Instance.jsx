@@ -22,7 +22,7 @@ function Instance() {
   const getData = async (machineName) => {
     setError("");
     try {
-      const res = await fetch("http://localhost:5000/api/getData", {
+      const res = await fetch("/api/getData", {
         method: 'POST',
         body: JSON.stringify({ name: machineName }),
         headers: {
@@ -50,7 +50,7 @@ function Instance() {
 
   const handleState = async (opt) => {
     try {
-      const res = await fetch("http://localhost:5000/api/changeState", {
+      const res = await fetch("/api/changeState", {
         method: 'POST',
         body: JSON.stringify({ name: machine.name, option: opt }),
         headers: {
@@ -81,7 +81,7 @@ function Instance() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/createFromTemplate", {
+      const res = await fetch("/api/createFromTemplate", {
         method: 'POST',
         body: JSON.stringify({ template: machineName, name: name }),
         headers: {

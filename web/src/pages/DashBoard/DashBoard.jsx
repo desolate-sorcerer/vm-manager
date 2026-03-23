@@ -13,7 +13,7 @@ function DashBoard() {
   const getXML = async () => {
     setError("");
     try {
-      const store = await fetch("http://localhost:5000/api/storeDesc");
+      const store = await fetch("/api/storeDesc");
       const storeData = await store.json();
 
       if (!store.ok) {
@@ -21,7 +21,7 @@ function DashBoard() {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/getDesc");
+      const res = await fetch("/api/getDesc");
       const data = await res.json();
 
       if (!res.ok) {
@@ -42,7 +42,7 @@ function DashBoard() {
   const handleClick = async (machineName) => {
     setError("");
     try {
-      const res = await fetch("http://localhost:5000/api/getData", {
+      const res = await fetch("/api/getData", {
         method: 'POST',
         body: JSON.stringify({ name: machineName }),
         headers: {
@@ -68,7 +68,7 @@ function DashBoard() {
     setError("");
     setMessage("");
     try {
-      const res = await fetch("http://localhost:5000/api/rmInstance", {
+      const res = await fetch("/api/rmInstance", {
         method: 'POST',
         body: JSON.stringify({ name }),
         headers: {

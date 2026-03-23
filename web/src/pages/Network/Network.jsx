@@ -13,7 +13,7 @@ function Network() {
 
   const getNetworks = (async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/getNetworks")
+      const res = await fetch("/api/getNetworks")
       const data = await res.json()
       if (!res.ok) {
         setError(data.error)
@@ -32,7 +32,7 @@ function Network() {
 
   const handleClick = async (network) => {
     try {
-      const res = await fetch("http://localhost:5000/api/delNetwork", {
+      const res = await fetch("/api/delNetwork", {
         method: 'POST',
         body: JSON.stringify({ name: network }),
         headers: {
